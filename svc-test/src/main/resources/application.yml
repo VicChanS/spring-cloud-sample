@@ -6,8 +6,6 @@ spring:
     name: svc-test
 
 eureka:
-  instance:
-    hostname: ${spring.application.name}
   client:
     serviceUrl:
       # 注册到任何一个eureka服务都可以（peer1，peer2，peer3）

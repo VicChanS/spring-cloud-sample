@@ -1,0 +1,40 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: sc-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # 默认为true，表示会同时创建一个与对应服务同名的访问路径，如localhost:9000/svc-test/hi
+          enabled: false
+          lowerCaseServiceId: true
+      routes:
+      # 路径id，唯一标识一个路径
+      - id: svc-test
+        # lb://SVC-TEST即svc-test服务的负载均衡地址
+        uri: lb://SVC-TEST
+        predicates:
+          # 将以/test/**开头的请求转发到上面的uri
+          - Path=/test/**
+        filters:
+          # StripPrefix=1表示在转发之前去掉路径中的第一个目录，即去掉/demo
+          - StripPrefix=1
+          # - RequestTime=true
+
+eureka:
+  # 注意，在非必要时不要写hostname，可能会导致网关失效
+  # instance:
+  #   hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://peer1:8761/eureka/
+
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
+
+
+
