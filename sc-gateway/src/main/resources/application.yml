@@ -23,6 +23,13 @@ spring:
           # StripPrefix=1表示在转发之前去掉路径中的第一个目录，即去掉/demo
           - StripPrefix=1
           # - RequestTime=true
+  zipkin:
+    # 默认url
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      # 默认采集率为0.1，1为全部采集
+      probability: 1
 
 eureka:
   # 注意，在非必要时不要写hostname，可能会导致网关失效
