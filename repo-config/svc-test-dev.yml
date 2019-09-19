@@ -1,0 +1,8 @@
+#
+# sc-test\u7684\u5F00\u53D1\u73AF\u5883\u914D\u7F6E
+#
+
+# \u6D4B\u8BD5\u6570\u636E
+foo: foo version 5000
+democonfigclient:
+  message: hello spring io
