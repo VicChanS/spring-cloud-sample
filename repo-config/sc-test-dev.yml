@@ -1,0 +1,8 @@
+#
+# sc-test的开发环境配置
+#
+
+# 测试数据
+foo: foo version 3
+democonfigclient:
+  message: hello spring io
