@@ -3,7 +3,20 @@ spring:
     name: sc-eureka
   profiles:
     # 选择激活哪个profiles
-    active: peer3
+    active: peer0
+
+---
+spring:
+  profiles: peer0
+server:
+  port: 8761
+eureka:
+  client:
+    # 禁止注册中心自己注册进来
+    register-with-eureka: false
+    fetch-registry: false
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
 ---
 spring:
   profiles: peer1
@@ -14,7 +27,6 @@ eureka:
     serviceUrl:
       # 填入其他两个eureka服务的地址和端口，多个服务用逗号隔开
       defaultZone: http://peer2:8762/eureka/,http://peer3:8763/eureka/
-
 ---
 spring:
   profiles: peer2

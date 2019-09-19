@@ -18,6 +18,7 @@
 
     <modules>
         <module>sc-eureka</module>
+        <module>sc-config</module>
         <module>sc-gateway</module>
         <module>svc-test</module>
     </modules>
