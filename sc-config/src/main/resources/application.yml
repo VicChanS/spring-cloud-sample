@@ -16,7 +16,7 @@ eureka:
 spring:
   # 表示使用本地方式读取配置文件
   profiles:
-    active: native
+    active: git
   cloud:
     config:
       server:
