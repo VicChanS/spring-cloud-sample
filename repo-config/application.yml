@@ -1,3 +1,8 @@
 #
 # 所有微服务的所有环境通用的配置
 #
+
+#logback文件路径配置
+#不能使用默认的logback或logback-spring文件名，否则会在读取配置中心配置前加载
+logging:
+  config: classpath:logback-svc.xml

@@ -48,6 +48,30 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!--把logback格式的日志转化成logstash格式-->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>4.11</version>
+                <!--<version>5.0</version>-->
+            </dependency>
+            <!--加入kafka支持-->
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>2.1.8.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.danielwegener</groupId>
+                <artifactId>logback-kafka-appender</artifactId>
+                <version>0.1.0</version>
+            </dependency>
+            <!--json 依赖-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-json</artifactId>
+                <version>2.0.4.RELEASE</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

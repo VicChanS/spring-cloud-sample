@@ -1,5 +1,7 @@
 package com.vicchan.svc.test;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RefreshScope
 public class SvcTestApplication {
 
+  private static final Log LOGGER = LogFactory.getLog( SvcTestApplication.class );
+  // private static final Logger LOGGER = Logger.getLogger(SvcTestApplication.class.getName());
+
+
   public static void main(String[] args) {
     SpringApplication.run( SvcTestApplication.class, args );
   }
@@ -29,11 +35,14 @@ public class SvcTestApplication {
 
   @RequestMapping("/hi")
   public String home(@RequestParam(value = "name", defaultValue = "VicChan") String name) {
-    return "hi " + name + " ,i am from port:" + port;
+    String info = "hi " + name + " ,i am from port:" + port;
+    LOGGER.info( info );
+    return info;
   }
 
   @RequestMapping(value = "/foo")
   public String hi(){
+    LOGGER.info( "foo........");
     return foo;
   }
 
