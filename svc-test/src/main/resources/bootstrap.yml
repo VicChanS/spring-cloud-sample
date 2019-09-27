@@ -47,12 +47,18 @@ spring:
     password: guest
   zipkin:
     # 默认url
-    base-url: http://localhost:9411
+#    base-url: http://localhost:9411
+    sender:
+      type: kafka  # 支持三种 方式  RABBIT, KAFKA, WEB
+    service:
+      name: ${spring.application.name} #可以和 application.name 同名 但是kafka模式下必须设置
   sleuth:
     sampler:
       # 默认采集率为0.1，1为全部采集
       probability: 1
-
+  kafka:
+#    bootstrap-servers: ${server.ip}:9092
+    bootstrap-servers: 192.168.0.220:9092
 management:
   endpoints:
     web:

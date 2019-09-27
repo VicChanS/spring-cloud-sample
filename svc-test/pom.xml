@@ -39,6 +39,8 @@
         </dependency>
 
         <!--消息总线-->
+        <!--注意，加入bus-amqp后，会使得zipin的收集方式变成rabbitmq（默认http），导致收集不到数据-->
+        <!--在配置文件中加入spring.zipkin.sender.type: web，可修改为默认http收集方式-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bus-amqp</artifactId>
