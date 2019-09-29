@@ -49,7 +49,10 @@ spring:
     # 默认url
 #    base-url: http://localhost:9411
     sender:
-      type: kafka  # 支持三种 方式  RABBIT, KAFKA, WEB
+      # 支持三种 方式  RABBIT, KAFKA, WEB
+      # 把链路信息先推入kafka，zipkin再从kafka中获取
+      # 需要配合在zipkin启动时，添加以下参数- DKAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
+      type: kafka
     service:
       name: ${spring.application.name} #可以和 application.name 同名 但是kafka模式下必须设置
   sleuth:

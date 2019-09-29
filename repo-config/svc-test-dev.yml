@@ -3,6 +3,6 @@
 #
 
 # \u6D4B\u8BD5\u6570\u636E
-foo: foo version jjjj
+foo: foo version bbbbbbb
 democonfigclient:
   message: hello spring io
