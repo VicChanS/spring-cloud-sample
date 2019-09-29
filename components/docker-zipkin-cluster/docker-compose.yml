@@ -12,7 +12,7 @@ services:
     container_name: zipkin-one
     environment:
       # 从kafka中获取信息。注意，在logstash中不要抓取zipkin主题的kafka信息，否则会导致zipkin无法正常获取kafka信息
-      - DKAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
+      - KAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
       # 把链路信息保存到ES中
       - STORAGE_TYPE=elasticsearch
       # ES主机地址
@@ -21,7 +21,7 @@ services:
       - ES_USERNAME=elastic
       # ES登录密码
       - ES_PASSWORD=changeme
-      - JAVA_OPTS=-Dlogging.level.zipkin=INFO -Dlogging.level.zipkin2=INFO
+#      - JAVA_OPTS=-Dlogging.level.zipkin=INFO -Dlogging.level.zipkin2=INFO
     networks:
       - zipkin
 # 本地运行先去掉集群配置，省内存（集群环境已验证成功）
@@ -29,7 +29,7 @@ services:
 #    image: openzipkin/zipkin:latest
 #    container_name: zipkin-two
 #    environment:
-#      - DKAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
+#      - KAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
 #      - STORAGE_TYPE=elasticsearch
 #      - ES_HOSTS=http://192.168.0.220:9200
 ##      - JAVA_OPTS=-Dlogging.level.zipkin=DEBUG -Dlogging.level.zipkin2=DEBUG
@@ -39,7 +39,7 @@ services:
 #    image: openzipkin/zipkin:latest
 #    container_name: zipkin-three
 #    environment:
-#      - DKAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
+#      - KAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
 #      - STORAGE_TYPE=elasticsearch
 #      - ES_HOSTS=http://192.168.0.220:9200
 ##      - JAVA_OPTS=-Dlogging.level.zipkin=DEBUG -Dlogging.level.zipkin2=DEBUG
