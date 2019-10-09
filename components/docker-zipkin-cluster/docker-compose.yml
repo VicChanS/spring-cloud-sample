@@ -21,7 +21,8 @@ services:
       - ES_USERNAME=elastic
       # ES登录密码
       - ES_PASSWORD=changeme
-#      - JAVA_OPTS=-Dlogging.level.zipkin=INFO -Dlogging.level.zipkin2=INFO
+#      - JAVA_OPTS=-Xmx256M -Xms256M
+      - JAVA_OPTS=-Xmx256M -Xms256M -Dlogging.level.zipkin=INFO -Dlogging.level.zipkin2=INFO
     networks:
       - zipkin
 # 本地运行先去掉集群配置，省内存（集群环境已验证成功）

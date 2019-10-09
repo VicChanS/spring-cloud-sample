@@ -13,7 +13,10 @@ services:
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CREATE_TOPICS: "test:1:1"
-      KAFKA_LOG_DIRS: "/kafka_data"
+      # 设置堆栈大小
+      KAFKA_HEAP_OPTS: -Xmx256M -Xms256M
+      # 设置日志输出路径
+#      KAFKA_LOG_DIRS: "/kafka_data"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./kafka_data:/kafka_data
