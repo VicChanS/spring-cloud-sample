@@ -1,6 +1,6 @@
 spring:
   application:
-    name: svc-test
+    name: sc-gateway
   cloud:
     config:
       profile: dev  # 指定profile
