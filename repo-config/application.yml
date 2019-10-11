@@ -17,6 +17,26 @@ eureka:
       defaultZone: http://peer1:8761/eureka/
 
 spring:
+  datasource:
+    druid:
+      # url:  ${db.url}
+      # driver-class-name:  ${db.driverClassName}
+      url:  jdbc:mysql://${server.ip}:3306/spring_cloud_sample?allowMultiQueries=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&verifyServerCertificate=false&useSSL=false
+      driver-class-name:  com.mysql.jdbc.Driver
+      username: ${db.username}
+      password: ${db.password}
+      initial-size:  10
+      max-active:  50
+      min-idle:  10
+      max-wait:  60000
+      pool-prepared-statements:  true
+      max-pool-prepared-statement-per-connection-size:  20
+      validation-query:  SELECT 1 FROM DUAL
+      test-on-borrow:  false
+      test-on-return:  false
+      test-while-idle:  true
+      time-between-eviction-runs-millis:  60000
+      filters:  stat,wall
   cloud:
     bus:
       trace:
