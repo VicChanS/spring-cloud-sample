@@ -20,12 +20,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-        <!-- restful接口 -->
+        <!-- S支持全栈式Web开发，包括Tomcat和spring-webmvc。 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <!--链路追踪-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

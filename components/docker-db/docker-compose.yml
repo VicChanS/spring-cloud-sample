@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+
+    mysql:
+        build:
+            context: ./mysql
+            args:
+                - MYSQL_DATABASE=default_database
+                - MYSQL_USER=default_user
+                - MYSQL_PASSWORD=secret
+                - MYSQL_ROOT_PASSWORD=root
+        volumes:
+            - ./data/mysql/:/var/lib/mysql
+        expose:
+            - "3306"
+        ports:
+          - 3306:3306
+
+    redis:
+        build:
+            context: ./redis
+        expose:
+            - "6379"
+        ports:
+          - 6379:6379
+        volumes:
+            - ./data/redis:/data

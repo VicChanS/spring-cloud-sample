@@ -19,4 +19,4 @@ services:
 #      KAFKA_LOG_DIRS: "/kafka_data"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./kafka_data:/kafka_data
+#      - ./kafka_data:/kafka_data

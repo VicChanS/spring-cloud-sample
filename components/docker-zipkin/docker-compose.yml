@@ -1,0 +1,28 @@
+# This file uses the version 2 docker-compose file format, described here:
+# https://docs.docker.com/compose/compose-file/#version-2
+#
+# It extends the default configuration from docker-compose.yml to run the
+# zipkin-elasticsearch container instead of the zipkin-mysql container.
+
+version: '2'
+
+services:
+  zipkin-one:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin-one
+    environment:
+      # 从kafka中获取信息。注意，在logstash中不要抓取zipkin主题的kafka信息，否则会导致zipkin无法正常获取kafka信息
+      - KAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
+      # 把链路信息保存到ES中
+      - STORAGE_TYPE=elasticsearch
+      # ES主机地址
+      - ES_HOSTS=http://192.168.0.220:9200
+      # ES登录用户名
+      - ES_USERNAME=elastic
+      # ES登录密码
+      - ES_PASSWORD=changeme
+#      - JAVA_OPTS=-Xmx256M -Xms256M
+      - JAVA_OPTS=-Xmx256M -Xms256M -Dlogging.level.zipkin=INFO -Dlogging.level.zipkin2=INFO
+    ports:
+      - 9411:9411
+      - 1936:1936

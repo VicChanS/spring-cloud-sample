@@ -31,3 +31,4 @@ build/
 .vscode/
 /components/docker-elk/elasticsearch/data/
 /components/docker-kafka/kafka_data/
+/components/docker-db/data/
