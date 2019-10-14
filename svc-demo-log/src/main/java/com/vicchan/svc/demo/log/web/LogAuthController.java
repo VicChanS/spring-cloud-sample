@@ -24,7 +24,7 @@ public class LogAuthController {
   private LogService logService;
 
   @PostMapping("/fail")
-  public Object authFail(@RequestBody String body, HttpServletRequest request) {
+  public Object fail(@RequestBody String body, HttpServletRequest request) {
     String action = JacksonUtil.parseString( body, "action" );
     String error = JacksonUtil.parseString( body, "error" );
     String username = JacksonUtil.parseString( body, "username" );
@@ -32,7 +32,7 @@ public class LogAuthController {
   }
 
   @PostMapping("/succeed")
-  public Object authSucceed(@RequestBody String body, HttpServletRequest request) {
+  public Object succeed(@RequestBody String body, HttpServletRequest request) {
     String action = JacksonUtil.parseString( body, "action" );
     String username = JacksonUtil.parseString( body, "username" );
     return logService.logAuthSucceed( action, username );

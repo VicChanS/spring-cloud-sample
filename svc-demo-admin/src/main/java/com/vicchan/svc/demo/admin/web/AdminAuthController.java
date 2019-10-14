@@ -1,5 +1,7 @@
 package com.vicchan.svc.demo.admin.web;
 
+import com.alibaba.druid.support.json.JSONUtils;
+import com.vicchan.svc.demo.admin.feign.LogFeignClient;
 import com.vicchan.svc.demo.admin.service.AdminService;
 import com.vicchan.svc.demo.admin.util.IpUtil;
 import com.vicchan.svc.demo.admin.util.JacksonUtil;
@@ -7,10 +9,13 @@ import com.vicchan.svc.demo.admin.util.ResponseUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.support.json.JacksonJsonUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -21,15 +26,34 @@ public class AdminAuthController {
 
   @Autowired
   private AdminService adminService;
-  // @Autowired
-  // private LogHelper logHelper;
+  //编译器报错，无视。 因为这个Bean是在程序启动的时候注入的，编译器感知不到，所以报错。
+  @Autowired
+  private LogFeignClient logFC;
+
 
   @PostMapping("/login")
   public Object login(@RequestBody String body, HttpServletRequest request) {
     String username = JacksonUtil.parseString( body, "username" );
     String password = JacksonUtil.parseString( body, "password" );
     String ip = IpUtil.getIpAddr( request );
-    return adminService.login( username, password, ip );
+    //登录
+    Map<String, Object> map = (HashMap<String, Object>) adminService.login( username, password, ip );
+    Integer errno = (Integer) map.get( "errno" );
+    //调用svc-demo-log服务，写入日志
+    Map<String, Object> logMap =new HashMap<>();
+    logMap.put( "action", "登录" );
+    logMap.put( "username", username );
+    if (errno != null && errno == 0) {
+      //成功
+      Object obj  = logFC.authSucceed( JSONUtils.toJSONString( logMap ));
+      logger.info( obj.toString());
+    } else {
+      //失败
+      logMap.put( "errmsg", map.get( "errmsg" ) );
+      Object obj = logFC.authFail( JSONUtils.toJSONString( logMap ));
+      logger.info( obj.toString() );
+    }
+    return map;
   }
 
   // /*

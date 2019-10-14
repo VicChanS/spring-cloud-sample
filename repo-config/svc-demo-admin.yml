@@ -3,3 +3,6 @@
 #
 server:
   port: 9001
+
+#开启feign的断路器功能
+feign.hystrix.enabled: true
