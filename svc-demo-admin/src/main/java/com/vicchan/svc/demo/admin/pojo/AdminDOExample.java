@@ -96,19 +96,50 @@ public class AdminDOExample {
     }
 
     protected abstract static class GeneratedCriteria {
+        protected List<Criterion> roleIdsCriteria;
+
+        protected List<Criterion> allCriteria;
+
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
             super();
             criteria = new ArrayList<Criterion>();
+            roleIdsCriteria = new ArrayList<Criterion>();
+        }
+
+        public List<Criterion> getRoleIdsCriteria() {
+            return roleIdsCriteria;
+        }
+
+        protected void addRoleIdsCriterion(String condition, Object value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            roleIdsCriteria.add(new Criterion(condition, value, "com.vicchan.svc.demo.admin.mybatis.JsonIntegerArrayTypeHandler"));
+            allCriteria = null;
+        }
+
+        protected void addRoleIdsCriterion(String condition, Integer[] value1, Integer[] value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            roleIdsCriteria.add(new Criterion(condition, value1, value2, "com.vicchan.svc.demo.admin.mybatis.JsonIntegerArrayTypeHandler"));
+            allCriteria = null;
         }
 
         public boolean isValid() {
-            return criteria.size() > 0;
+            return criteria.size() > 0
+                || roleIdsCriteria.size() > 0;
         }
 
         public List<Criterion> getAllCriteria() {
-            return criteria;
+            if (allCriteria == null) {
+                allCriteria = new ArrayList<Criterion>();
+                allCriteria.addAll(criteria);
+                allCriteria.addAll(roleIdsCriteria);
+            }
+            return allCriteria;
         }
 
         public List<Criterion> getCriteria() {
@@ -120,6 +151,7 @@ public class AdminDOExample {
                 throw new RuntimeException("Value for condition cannot be null");
             }
             criteria.add(new Criterion(condition));
+            allCriteria = null;
         }
 
         protected void addCriterion(String condition, Object value, String property) {
@@ -127,6 +159,7 @@ public class AdminDOExample {
                 throw new RuntimeException("Value for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value));
+            allCriteria = null;
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
@@ -134,6 +167,7 @@ public class AdminDOExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
+            allCriteria = null;
         }
 
         public Criteria andIdIsNull() {
@@ -726,63 +760,63 @@ public class AdminDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsEqualTo(String value) {
-            addCriterion("role_ids =", value, "roleIds");
+        public Criteria andRoleIdsEqualTo(Integer[] value) {
+            addRoleIdsCriterion("role_ids =", value, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsNotEqualTo(String value) {
-            addCriterion("role_ids <>", value, "roleIds");
+        public Criteria andRoleIdsNotEqualTo(Integer[] value) {
+            addRoleIdsCriterion("role_ids <>", value, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsGreaterThan(String value) {
-            addCriterion("role_ids >", value, "roleIds");
+        public Criteria andRoleIdsGreaterThan(Integer[] value) {
+            addRoleIdsCriterion("role_ids >", value, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsGreaterThanOrEqualTo(String value) {
-            addCriterion("role_ids >=", value, "roleIds");
+        public Criteria andRoleIdsGreaterThanOrEqualTo(Integer[] value) {
+            addRoleIdsCriterion("role_ids >=", value, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsLessThan(String value) {
-            addCriterion("role_ids <", value, "roleIds");
+        public Criteria andRoleIdsLessThan(Integer[] value) {
+            addRoleIdsCriterion("role_ids <", value, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsLessThanOrEqualTo(String value) {
-            addCriterion("role_ids <=", value, "roleIds");
+        public Criteria andRoleIdsLessThanOrEqualTo(Integer[] value) {
+            addRoleIdsCriterion("role_ids <=", value, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsLike(String value) {
-            addCriterion("role_ids like", value, "roleIds");
+        public Criteria andRoleIdsLike(Integer[] value) {
+            addRoleIdsCriterion("role_ids like", value, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsNotLike(String value) {
-            addCriterion("role_ids not like", value, "roleIds");
+        public Criteria andRoleIdsNotLike(Integer[] value) {
+            addRoleIdsCriterion("role_ids not like", value, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsIn(List<String> values) {
-            addCriterion("role_ids in", values, "roleIds");
+        public Criteria andRoleIdsIn(List<Integer[]> values) {
+            addRoleIdsCriterion("role_ids in", values, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsNotIn(List<String> values) {
-            addCriterion("role_ids not in", values, "roleIds");
+        public Criteria andRoleIdsNotIn(List<Integer[]> values) {
+            addRoleIdsCriterion("role_ids not in", values, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsBetween(String value1, String value2) {
-            addCriterion("role_ids between", value1, value2, "roleIds");
+        public Criteria andRoleIdsBetween(Integer[] value1, Integer[] value2) {
+            addRoleIdsCriterion("role_ids between", value1, value2, "roleIds");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdsNotBetween(String value1, String value2) {
-            addCriterion("role_ids not between", value1, value2, "roleIds");
+        public Criteria andRoleIdsNotBetween(Integer[] value1, Integer[] value2) {
+            addRoleIdsCriterion("role_ids not between", value1, value2, "roleIds");
             return (Criteria) this;
         }
     }

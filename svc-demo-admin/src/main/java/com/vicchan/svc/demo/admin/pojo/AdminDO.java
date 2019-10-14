@@ -42,7 +42,7 @@ public class AdminDO implements Serializable {
 
     private Boolean deleted;
 
-    private String roleIds;
+    private Integer[] roleIds;
 
     private static final long serialVersionUID = 1L;
 
@@ -118,12 +118,12 @@ public class AdminDO implements Serializable {
         this.deleted = deleted;
     }
 
-    public String getRoleIds() {
+    public Integer[] getRoleIds() {
         return roleIds;
     }
 
-    public void setRoleIds(String roleIds) {
-        this.roleIds = roleIds == null ? null : roleIds.trim();
+    public void setRoleIds(Integer[] roleIds) {
+        this.roleIds = roleIds;
     }
 
     @Override
@@ -168,7 +168,7 @@ public class AdminDO implements Serializable {
             && (this.getAddTime() == null ? other.getAddTime() == null : this.getAddTime().equals(other.getAddTime()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
             && (this.getDeleted() == null ? other.getDeleted() == null : this.getDeleted().equals(other.getDeleted()))
-            && (this.getRoleIds() == null ? other.getRoleIds() == null : this.getRoleIds().equals(other.getRoleIds()));
+            && (Arrays.equals(this.getRoleIds(), other.getRoleIds()));
     }
 
     @Override
@@ -184,7 +184,7 @@ public class AdminDO implements Serializable {
         result = prime * result + ((getAddTime() == null) ? 0 : getAddTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
         result = prime * result + ((getDeleted() == null) ? 0 : getDeleted().hashCode());
-        result = prime * result + ((getRoleIds() == null) ? 0 : getRoleIds().hashCode());
+        result = prime * result + (Arrays.hashCode(getRoleIds()));
         return result;
     }
 

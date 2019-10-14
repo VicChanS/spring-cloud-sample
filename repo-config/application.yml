@@ -5,8 +5,6 @@
 #logback文件路径配置
 #不能使用默认的logback或logback-spring文件名，否则会在读取配置中心配置前加载
 logging:
-  level:
-    org.springframework.cloud.gateway: debug
   config: classpath:logback-svc.xml
 
 
@@ -22,9 +20,12 @@ spring:
       # url:  ${db.url}
       # driver-class-name:  ${db.driverClassName}
       url:  jdbc:mysql://${server.ip}:3306/spring_cloud_sample?allowMultiQueries=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&verifyServerCertificate=false&useSSL=false
+#      url:  jdbc:mysql://192.168.0.220:3306/spring_cloud_sample?allowMultiQueries=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&verifyServerCertificate=false&useSSL=false
       driver-class-name:  com.mysql.jdbc.Driver
       username: ${db.username}
       password: ${db.password}
+#      username: root
+#      password: root
       initial-size:  10
       max-active:  50
       min-idle:  10
@@ -74,6 +75,12 @@ management:
         # 指定消息总线刷新的接口名称
         include: bus-refresh
 
+# 分页
+pagehelper:
+  helperDialect:  mysql
+  reasonable: true
+  supportMethodsArguments:  true
+  params: count=countSql
 
 
 

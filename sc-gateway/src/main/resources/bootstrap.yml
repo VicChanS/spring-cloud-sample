@@ -1,3 +1,7 @@
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
+
 spring:
   application:
     name: sc-gateway
