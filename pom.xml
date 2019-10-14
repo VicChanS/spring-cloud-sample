@@ -22,6 +22,7 @@
         <module>sc-gateway</module>
         <module>svc-test</module>
         <module>svc-demo-admin</module>
+        <module>svc-demo-log</module>
     </modules>
 
     <properties>

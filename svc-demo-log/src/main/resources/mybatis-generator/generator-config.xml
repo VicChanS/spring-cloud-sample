@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+    PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+    "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+
+    <!--需要把当前项目的jar报引入到classPathEntry中，才能使BaseDO生效。已经把改配置放到pom.xml中-->
+    <!--<classPathEntry location="/Users/vicchan/CodeMonkey/hj-team/hj-server/core-db/target/core-db.jar" />-->
+
+    <context id="mysqlgenerator" targetRuntime="MyBatis3">
+        <property name="autoDelimitKeywords" value="true"/>
+        <!--可以使用``包括字段名，避免字段名与sql保留字冲突报错-->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <!-- 生成的pojo，将implements Serializable-->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+        <!-- 自动生成toString方法 -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!-- 自动生成equals方法和hashcode方法 -->
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+
+        <!-- 非官方插件 https://github.com/itfsw/mybatis-generator-plugin -->
+        <!-- 查询单条数据插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.SelectOneByExamplePlugin"/>
+        <!-- 查询结果选择性返回插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.SelectSelectivePlugin"/>
+        <!-- Example Criteria 增强插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.ExampleEnhancedPlugin"/>
+        <!-- 数据Model属性对应Column获取插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.ModelColumnPlugin"/>
+        <!-- 逻辑删除插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.LogicalDeletePlugin">
+            <!-- 这里配置的是全局逻辑删除列和逻辑删除值，当然在table中配置的值会覆盖该全局配置 -->
+            <!-- 逻辑删除列类型只能为数字、字符串或者布尔类型 -->
+            <property name="logicalDeleteColumn" value="deleted"/>
+            <!-- 逻辑删除-已删除值 -->
+            <property name="logicalDeleteValue" value="1"/>
+            <!-- 逻辑删除-未删除值 -->
+            <property name="logicalUnDeleteValue" value="0"/>
+        </plugin>
+        <!-- 乐观锁插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.OptimisticLockerPlugin"/>
+
+
+        <!--commentGenerator还可以配置一个type，设置自己的注解生成器-->
+        <!--默认使用的是org.mybatis.generator.internal.DefaultCommentGenerator；-->
+        <commentGenerator>
+            <!--去掉生成日期那行注释-->
+            <property name="suppressDate" value="true"/>
+            <!--去掉所有的注解-->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--jdbc的数据库连接 读取hj-server.pom中的配置项-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.0.220:3306/spring_cloud_sample?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=UTC&amp;verifyServerCertificate=false&amp;useSSL=false"
+                        userId="root"
+                        password="root"/>
+
+        <javaModelGenerator targetPackage="${packageName}.pojo" targetProject="${basedir}/src/main/java">
+
+            <!-- 设置一个根对象，
+                如果设置了这个根对象，那么生成的keyClass或者recordClass会继承这个类；在Table的rootClass属性中可以覆盖该选项
+                注意：如果在key class或者record class中有root class相同的属性，MBG就不会重新生成这些属性了，包括：
+                    1，属性名相同，类型相同，有相同的getter/setter方法；1.3.5
+
+             -->
+            <!--<property name="rootClass" value="${packageName}.common.BaseDO"/>-->
+
+            <!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="${packageName}.mapper" targetProject="${basedir}/src/main/resources"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${packageName}.mapper"
+                             targetProject="${basedir}/src/main/java"/>
+        <!--表名-->
+        <table tableName="scs_log" domainObjectName="LogDO">
+            <columnRenamingRule searchString="^is_" replaceString=""/>
+            <columnOverride javaType="java.util.Date" column="add_time"/>
+            <columnOverride javaType="java.util.Date" column="update_time"/>
+
+            <!--mysql中tinyint如果是1位则对应Boolean类型，如果是2位则对应Byte类型-->
+            <!--<columnOverride column="is_deleted" property="deleted"/>-->
+        </table>
+    </context>
+</generatorConfiguration>

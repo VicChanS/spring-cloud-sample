@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.vicchan</groupId>
-    <artifactId>svc-demo-admin</artifactId>
+    <artifactId>svc-demo-log</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>svc-demo-admin</name>
-    <description>管理员服务</description>
+    <name>svc-demo-log</name>
+    <description>日志服务</description>
 
     <parent>
         <groupId>com.vicchan</groupId>
@@ -17,7 +17,7 @@
     <properties>
         <!--以下参数在mybatis生成器中起作用-->
         <!--包名-->
-        <packageName>com.vicchan.svc.demo.admin</packageName>
+        <packageName>com.vicchan.svc.demo.log</packageName>
     </properties>
 
     <dependencies>
@@ -78,11 +78,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
-        <!--shiro安全框架-->
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring-boot-web-starter</artifactId>
-        </dependency>
         <!-- Spring Boot Mybatis 依赖 -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -122,13 +117,13 @@
                     <verbose>true</verbose>
                     <filesets>
                         <fileset>
-                            <directory>${project.build.sourceDirectory}/com/vicchan/svc/demo/admin/pojo</directory>
+                            <directory>${project.build.sourceDirectory}/com/vicchan/svc/demo/log/pojo</directory>
                         </fileset>
                         <fileset>
-                            <directory>${project.build.sourceDirectory}/com/vicchan/svc/demo/admin/mapper</directory>
+                            <directory>${project.build.sourceDirectory}/com/vicchan/svc/demo/log/mapper</directory>
                         </fileset>
                         <fileset>
-                            <directory>${project.basedir}/src/main/resources/com/vicchan/svc/demo/admin/mapper</directory>
+                            <directory>${project.basedir}/src/main/resources/com/vicchan/svc/demo/log/mapper</directory>
                         </fileset>
                     </filesets>
                 </configuration>

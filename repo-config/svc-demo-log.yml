@@ -1,0 +1,5 @@
+#
+# svc-demo-log所有环境通用的配置
+#
+server:
+  port: 9002
