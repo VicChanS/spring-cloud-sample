@@ -71,10 +71,15 @@ spring:
 management:
   endpoints:
     web:
+      # 指定暴露的接口
       exposure:
-        # 指定消息总线刷新的接口名称
-        include: bus-refresh
-
+        # 消息总线刷新的接口名称
+#        include: bus-refresh
+        # 暴露所有接口
+        include: "*"
+      cors:
+        allowed-origins: "*"
+        allowed-methods: "*"
 # 分页
 pagehelper:
   helperDialect:  mysql

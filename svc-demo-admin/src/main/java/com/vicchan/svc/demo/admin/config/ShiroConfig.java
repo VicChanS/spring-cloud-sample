@@ -34,6 +34,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/auth/index", "anon");
         filterChainDefinitionMap.put("/auth/403", "anon");
         filterChainDefinitionMap.put("/index/index", "anon");
+        //健康检查不过滤
+        filterChainDefinitionMap.put("/actuator/hystrix.stream", "anon");
 
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setLoginUrl("/auth/401");

@@ -1,0 +1,144 @@
+version: '3.2'
+
+services:
+  mysql:
+    build:
+      context: ./docker-db/mysql
+      args:
+        - MYSQL_DATABASE=default_database
+        - MYSQL_USER=default_user
+        - MYSQL_PASSWORD=secret
+        - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./docker-db/data/mysql/:/var/lib/mysql
+    expose:
+      - "3306"
+    ports:
+      - 3306:3306
+  redis:
+    build:
+      context: ./docker-db/redis
+    expose:
+      - "6379"
+    ports:
+      - 6379:6379
+    volumes:
+      - ./docker-db/data/redis:/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq1
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    build: ./docker-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.0.220
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "test:1:1"
+      # 设置堆栈大小
+      KAFKA_HEAP_OPTS: -Xmx256M -Xms256M
+      # 设置日志输出路径
+#      KAFKA_LOG_DIRS: "/kafka_data"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+#      - ./kafka_data:/kafka_data
+#  zipkin:
+#    image: openzipkin/zipkin:latest
+#    container_name: zipkin
+#    environment:
+#      # 从kafka中获取信息。注意，在logstash中不要抓取zipkin主题的kafka信息，否则会导致zipkin无法正常获取kafka信息
+#      - KAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
+#      # 把链路信息保存到ES中
+#      - STORAGE_TYPE=elasticsearch
+#      # ES主机地址
+#      - ES_HOSTS=http://192.168.0.220:9200
+#      # ES登录用户名
+#      - ES_USERNAME=elastic
+#      # ES登录密码
+#      - ES_PASSWORD=changeme
+##      - JAVA_OPTS=-Xmx256M -Xms256M
+#      - JAVA_OPTS=-Xmx256M -Xms256M -Dlogging.level.zipkin=INFO -Dlogging.level.zipkin2=INFO
+#    ports:
+#      - 9411:9411
+#      - 1936:1936
+#
+#  elasticsearch:
+#    build:
+#      context: docker-elk/elasticsearch/
+#      args:
+#        ELK_VERSION: $ELK_VERSION
+#    volumes:
+#      - ./docker-elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+#      - ./docker-elk/elasticsearch/data:/usr/share/elasticsearch/data
+#      - ./docker-elk/elasticsearch/plugins:/usr/share/elasticsearch/plugins
+#    ports:
+#      - "9200:9200"
+#      - "9300:9300"
+#    environment:
+#      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+#      ELASTIC_PASSWORD: changeme
+#    networks:
+#      - elk
+#
+#  logstash:
+#    build:
+#      context: docker-elk/logstash/
+#      args:
+#        ELK_VERSION: $ELK_VERSION
+#    volumes:
+#      - type: bind
+#        source: ./docker-elk/logstash/config/logstash.yml
+#        target: /usr/share/logstash/config/logstash.yml
+#        read_only: true
+#      - type: bind
+#        source: ./docker-elk/logstash/pipeline
+#        target: /usr/share/logstash/pipeline
+#        read_only: true
+#    ports:
+#      - "5000:5000"
+#      - "9600:9600"
+#    environment:
+#      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+#    networks:
+#      - elk
+#    depends_on:
+#      - elasticsearch
+#
+#  kibana:
+#    build:
+#      context: docker-elk/kibana/
+#      args:
+#        ELK_VERSION: $ELK_VERSION
+#    volumes:
+#      - type: bind
+#        source: ./docker-elk/kibana/config/kibana.yml
+#        target: /usr/share/kibana/config/kibana.yml
+#        read_only: true
+#    ports:
+#      - "5601:5601"
+#    networks:
+#      - elk
+#    depends_on:
+#      - elasticsearch
+#
+#networks:
+#  elk:
+#    driver: bridge
+#
+#volumes:
+#  elasticsearch:

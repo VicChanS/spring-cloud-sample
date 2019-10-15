@@ -20,9 +20,11 @@
         <module>sc-eureka</module>
         <module>sc-config</module>
         <module>sc-gateway</module>
+        <module>sc-hystrix-dashboard-turbine</module>
         <module>svc-test</module>
         <module>svc-demo-admin</module>
         <module>svc-demo-log</module>
+
     </modules>
 
     <properties>

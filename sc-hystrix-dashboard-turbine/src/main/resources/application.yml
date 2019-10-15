@@ -1,0 +1,29 @@
+server:
+  port: 8999
+
+spring:
+  application:
+    name: sc-hystrix-dashboard-turbine
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://peer1:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      cors:
+        allowed-origins: "*"
+        allowed-methods: "*"
+
+turbine:
+  app-config: svc-demo-admin,svc-demo-log,svc-test
+  aggregator:
+    clusterConfig: default
+  clusterNameExpression: new String("default")
+  combine-host: true
+  instanceUrlSuffix:
+    default: actuator/hystrix.stream
