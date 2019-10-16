@@ -1,5 +1,7 @@
 #
-# svc-demo-log所有环境通用的配置
+# svc-demo-log：svc-demo-log的所有环境通用配置
+# svc-demo-log-dev：svc-demo-log的dev(开发环境)配置
+# svc-demo-log-prod：svc-demo-log的prod(生产环境)配置
 #
 server:
   port: 9002

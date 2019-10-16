@@ -3,7 +3,7 @@ spring:
     name: svc-test
   cloud:
     config:
-      profile: dev  # 指定profile
+      profile: svc,svc-dev  # 指定profile
       # 修改hosts文件
       # uri: http://sc-config:8888
       # uri: http://localhost:8888

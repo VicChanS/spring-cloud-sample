@@ -1,5 +1,7 @@
 #
-# sc-gateway所有环境通用的配置
+# sc-gateway：sc-gateway的所有环境通用配置
+# sc-gateway-dev：sc-gateway的dev(开发环境)配置
+# sc-gateway-prod：sc-gateway的prod(生产环境)配置
 #
 server:
   port: 9000
@@ -37,7 +39,7 @@ spring:
           # - RequestTime=true
       - id: svc-demo-log
         # lb://SVC-TEST即svc-test服务的负载均衡地址
-        uri: lb://SVC-DEMO-LOG
+        uri: lb://svc-demo-log
         predicates:
           # 将以/test/**开头的请求转发到上面的uri
           - Path=/log/**

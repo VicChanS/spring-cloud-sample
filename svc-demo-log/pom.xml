@@ -17,92 +17,15 @@
     <properties>
         <!--以下参数在mybatis生成器中起作用-->
         <!--包名-->
-        <packageName>com.vicchan.svc.demo.log</packageName>
+        <packageName>com.vicchan.scsample.svc.demo.log</packageName>
     </properties>
 
     <dependencies>
-        <!--注册中心客户端-->
+        <!--添加业务型微服务的核心依赖包-->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <!-- S支持全栈式Web开发，包括Tomcat和spring-webmvc。 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!--链路追踪-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-zipkin</artifactId>
-        </dependency>
-
-        <!--配置中心 客户端-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
-
-        <!--消息总线-->
-        <!--注意，加入bus-amqp后，会使得zipin的收集方式变成rabbitmq（默认http），导致收集不到数据-->
-        <!--在配置文件中加入spring.zipkin.sender.type: web，可修改为默认http收集方式-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
-        </dependency>
-
-        <!--健康监控-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <!--把logback格式的日志转化成logstash格式-->
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-        </dependency>
-
-        <!--加入kafka支持-->
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
-        <!--logback对接kafka-->
-        <dependency>
-            <groupId>com.github.danielwegener</groupId>
-            <artifactId>logback-kafka-appender</artifactId>
-        </dependency>
-        <!--json 依赖-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-json</artifactId>
-        </dependency>
-        <!-- Spring Boot Mybatis 依赖 -->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-        </dependency>
-        <!-- mybatis-generator-core 依赖 -->
-        <dependency>
-            <groupId>org.mybatis.generator</groupId>
-            <artifactId>mybatis-generator-core</artifactId>
-        </dependency>
-
-        <!--mybatis分页 依赖-->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-        </dependency>
-        <!--mysql驱动 依赖-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <!--数据连接池-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <groupId>com.vicchan</groupId>
+            <artifactId>svc-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
@@ -117,13 +40,13 @@
                     <verbose>true</verbose>
                     <filesets>
                         <fileset>
-                            <directory>${project.build.sourceDirectory}/com/vicchan/svc/demo/log/pojo</directory>
+                            <directory>${project.build.sourceDirectory}/com/vicchan/scsample/svc/demo/log/pojo</directory>
                         </fileset>
                         <fileset>
-                            <directory>${project.build.sourceDirectory}/com/vicchan/svc/demo/log/mapper</directory>
+                            <directory>${project.build.sourceDirectory}/com/vicchan/scsample/svc/demo/log/mapper</directory>
                         </fileset>
                         <fileset>
-                            <directory>${project.basedir}/src/main/resources/com/vicchan/svc/demo/log/mapper</directory>
+                            <directory>${project.basedir}/src/main/resources/com/vicchan/scsample/svc/demo/log/mapper</directory>
                         </fileset>
                     </filesets>
                 </configuration>

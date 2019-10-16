@@ -17,6 +17,7 @@
     </parent>
 
     <modules>
+        <module>svc-core</module>
         <module>sc-eureka</module>
         <module>sc-config</module>
         <module>sc-gateway</module>
@@ -24,7 +25,6 @@
         <module>svc-test</module>
         <module>svc-demo-admin</module>
         <module>svc-demo-log</module>
-
     </modules>
 
     <properties>
@@ -136,6 +136,23 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--<configuration>
+                    <executable>true</executable>
+                    <skip>${plugin.maven.skip}</skip>
+                </configuration>-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <!--spring-boot-maven-plugin默认打包的jar是用于执行，不能被依赖-->
+                        <!--configuration中的配置表示输出两个jar，其中以exe结尾的jar用于执行，另一个可以被依赖-->
+                        <configuration>
+                            <!--classifier是可执行的jar的文件名的一部分，作为一个标志和默认的jar区分，可以是任意字符串-->
+                            <classifier>exe</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

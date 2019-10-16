@@ -1,13 +1,8 @@
 #
-# 所有微服务的所有环境通用的配置
+# application：所有微服务的通用配置
+# application-dev：所有微服务的dev(开发环境)配置
+# application-prod：所有微服务的prod(生产环境)配置
 #
-
-#logback文件路径配置
-#不能使用默认的logback或logback-spring文件名，否则会在读取配置中心配置前加载
-logging:
-  config: classpath:logback-svc.xml
-
-
 eureka:
   client:
     serviceUrl:
@@ -15,29 +10,6 @@ eureka:
       defaultZone: http://peer1:8761/eureka/
 
 spring:
-  datasource:
-    druid:
-      # url:  ${db.url}
-      # driver-class-name:  ${db.driverClassName}
-      url:  jdbc:mysql://${server.ip}:3306/spring_cloud_sample?allowMultiQueries=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&verifyServerCertificate=false&useSSL=false
-#      url:  jdbc:mysql://192.168.0.220:3306/spring_cloud_sample?allowMultiQueries=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&verifyServerCertificate=false&useSSL=false
-      driver-class-name:  com.mysql.jdbc.Driver
-      username: ${db.username}
-      password: ${db.password}
-#      username: root
-#      password: root
-      initial-size:  10
-      max-active:  50
-      min-idle:  10
-      max-wait:  60000
-      pool-prepared-statements:  true
-      max-pool-prepared-statement-per-connection-size:  20
-      validation-query:  SELECT 1 FROM DUAL
-      test-on-borrow:  false
-      test-on-return:  false
-      test-while-idle:  true
-      time-between-eviction-runs-millis:  60000
-      filters:  stat,wall
   cloud:
     bus:
       trace:
@@ -45,29 +17,14 @@ spring:
         enabled: true
       # 开启消息总线的功能
       enabled: true
+
   # rabbitmq相关配置
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
-  zipkin:
-    # 默认url
-#    base-url: http://localhost:9411
-    sender:
-      # 支持三种 方式  RABBIT, KAFKA, WEB
-      # 把链路信息先推入kafka，zipkin再从kafka中获取
-      # 需要配合在zipkin启动时，添加以下参数- KAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
-      type: KAFKA
-    service:
-      name: ${spring.application.name} #可以和 application.name 同名 但是kafka模式下必须设置
-  sleuth:
-    sampler:
-      # 默认采集率为0.1，1为全部采集
-      probability: 1
-  kafka:
-    bootstrap-servers: ${server.ip}:9092
-#    bootstrap-servers: 192.168.0.220:9092
+
 management:
   endpoints:
     web:
@@ -80,12 +37,6 @@ management:
       cors:
         allowed-origins: "*"
         allowed-methods: "*"
-# 分页
-pagehelper:
-  helperDialect:  mysql
-  reasonable: true
-  supportMethodsArguments:  true
-  params: count=countSql
 
 
 

@@ -1,0 +1,11 @@
+#
+# svc前缀的微服务的开发通用配置（需要在spring.cloud.config配置中加上svc-dev，以逗号隔开）
+#
+
+server:
+  # 自定义属性，用于在logback配置中获取ip
+  ip: 192.168.0.220
+# 自定义属性
+db:
+  username: root
+  password: root

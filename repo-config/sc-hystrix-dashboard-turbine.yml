@@ -1,0 +1,16 @@
+#
+# sc-hystrix-dashboard-turbine：sc-hystrix-dashboard-turbine的所有环境通用配置
+# sc-hystrix-dashboard-turbine-dev：sc-hystrix-dashboard-turbine的dev(开发环境)配置
+# sc-hystrix-dashboard-turbine-prod：sc-hystrix-dashboard-turbine的prod(生产环境)配置
+#
+server:
+  port: 8999
+
+turbine:
+  app-config: svc-demo-admin,svc-demo-log,svc-test
+  aggregator:
+    clusterConfig: default
+  clusterNameExpression: new String("default")
+  combine-host: true
+  instanceUrlSuffix:
+    default: actuator/hystrix.stream

@@ -82,7 +82,7 @@
             <columnOverride javaType="java.util.Date" column="add_time"/>
             <columnOverride javaType="java.util.Date" column="update_time"/>
             <columnOverride column="role_ids" javaType="java.lang.Integer[]"
-                            typeHandler="com.vicchan.svc.demo.admin.mybatis.JsonIntegerArrayTypeHandler"/>
+                            typeHandler="com.vicchan.scsample.svc.core.mybatis.JsonIntegerArrayTypeHandler"/>
             <!--mysql中tinyint如果是1位则对应Boolean类型，如果是2位则对应Byte类型-->
             <!--<columnOverride column="is_deleted" property="deleted"/>-->
         </table>

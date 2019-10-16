@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: sc-hystrix-dashboard-turbine
+  cloud:
+    config:
+      profile: dev  # 指定profile
+      label: master  # 指定gitlab仓库的分支
+      discovery:
+        # 不在直接使用uri，而是使用配置中心的服务名来识别
+        service-id: sc-config
+        # 是否通过注册中心来发现配置中心，默认值false，默认通过uri访问
+        enabled: true
+
+
+

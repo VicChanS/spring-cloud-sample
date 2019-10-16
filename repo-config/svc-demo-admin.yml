@@ -1,8 +1,7 @@
 #
-# svc-demo-admin所有环境通用的配置
+# svc-demo-admin：svc-demo-admin的所有环境通用配置
+# svc-demo-admin-dev：svc-demo-admin的dev(开发环境)配置
+# svc-demo-admin-prod：svc-demo-admin的prod(生产环境)配置
 #
 server:
   port: 9001
-
-#开启feign的断路器功能
-feign.hystrix.enabled: true
