@@ -1,5 +1,8 @@
 package com.vicchan.scsample.svc.demo.log.web;
 
+import com.vicchan.scsample.svc.core.swagger.model.ApiJsonObject;
+import com.vicchan.scsample.svc.core.swagger.model.ApiJsonProperty;
+import com.vicchan.scsample.svc.core.swagger.model.ApiJsonResult;
 import com.vicchan.scsample.svc.core.util.JacksonUtil;
 import com.vicchan.scsample.svc.demo.log.service.LogService;
 import io.swagger.annotations.*;
@@ -13,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
+import static com.vicchan.scsample.svc.core.common.GlobalString.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,32 +29,46 @@ public class LogAuthController {
   @Autowired
   private LogService logService;
 
-
   @ApiOperation(value="登录失败日志", notes = "写入登录失败的日志")
+  @ApiJsonObject(
+      name = "logAuthFail",
+      value={
+          @ApiJsonProperty( name = JSON_ACTION,required = true),
+          @ApiJsonProperty( name = JSON_ERRMSG,required = true, example =  "用户名密码错误"),
+          @ApiJsonProperty( name = JSON_USERNAME,required = true)
+      },
+      result = @ApiJsonResult(value = {JSON_ERRNO,JSON_ERRMSG})
+  )
+  @ApiImplicitParam(name = "body",required = true,dataType = "logAuthFail")
   @ApiResponses({
-      @ApiResponse( code=0,message="成功")
+      @ApiResponse( code=200,message="OK",reference = "logAuthFail")
   })
-  // @ApiParam(name = "body", value = "JSON格式字符串，包括动作action、错误码error和用户名username",required = true,allowableValues = )
   @PostMapping("/fail")
   public Object fail(@RequestBody String body, HttpServletRequest request) {
-    String action = JacksonUtil.parseString( body, "action" );
-    String error = JacksonUtil.parseString( body, "error" );
-    String username = JacksonUtil.parseString( body, "username" );
+    String action = JacksonUtil.parseString( body, JSON_ACTION );
+    String errmsg = JacksonUtil.parseString( body, JSON_ERRMSG );
+    String username = JacksonUtil.parseString( body, JSON_USERNAME );
     logger.info( "登录失败，写入日志" );
-    return logService.logAuthFail( action, error, username );
+    return logService.logAuthFail( action, errmsg, username );
   }
 
   @ApiOperation(value="登录成功日志", notes = "写入登录成功的日志")
+  @ApiJsonObject(
+      name = "logAuthSucceed",
+      value={
+          @ApiJsonProperty( name = JSON_ACTION,required = true),
+          @ApiJsonProperty( name = JSON_USERNAME,required = true)
+      },
+      result = @ApiJsonResult(value = {JSON_ERRNO,JSON_ERRMSG})
+  )
+  @ApiImplicitParam(name = "body",required = true,dataType = "logAuthSucceed")
   @ApiResponses({
-      @ApiResponse( code=0,message="成功")
+      @ApiResponse( code=200,message="ok",reference = "logAuthSucceed")
   })
-  // @ApiParam(name = "body",value = "JSON格式字符串，包括动作action、和用户名username",required = true)
   @PostMapping("/succeed")
-  public Object succeed(@RequestBody Map<String,Object> body, HttpServletRequest request) {
-    // String action = JacksonUtil.parseString( body, "action" );
-    // String username = JacksonUtil.parseString( body, "username" );
-    String action = (String) body.get( "action" );
-    String username = (String) body.get( "username" );
+  public Object succeed(@RequestBody String body, HttpServletRequest request) {
+    String action = JacksonUtil.parseString( body, JSON_ACTION );
+    String username = JacksonUtil.parseString( body, JSON_USERNAME );
     logger.info( "登录成功，写入日志" );
     return logService.logAuthSucceed( action, username );
   }

@@ -1,9 +1,5 @@
 package com.vicchan.scsample.svc.test;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @EnableDiscoveryClient
 @RefreshScope
-@Api("测试2")
 public class SvcTestApplication {
 
   private static final Log LOGGER = LogFactory.getLog( SvcTestApplication.class );
@@ -50,18 +44,6 @@ public class SvcTestApplication {
   public String hi(){
     LOGGER.info( "foo........");
     return foo;
-  }
-
-
-  @ApiOperation(value = "计算+", notes = "加法")
-  @ApiImplicitParams({
-      @ApiImplicitParam(name = "a", paramType = "path", value = "数字a", required = true, dataType = "Long"),
-      @ApiImplicitParam(name = "b", paramType = "path", value = "数字b", required = true, dataType = "Long")
-  })
-  @GetMapping("/testAPI2")
-  public String testAPI2(){
-    LOGGER.info( "testAPI......." );
-    return "testAPI";
   }
 
 }

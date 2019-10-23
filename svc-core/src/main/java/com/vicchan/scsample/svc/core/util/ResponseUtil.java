@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.vicchan.scsample.svc.core.common.GlobalString.*;
+
 /**
  * 响应操作结果
  * <pre>
@@ -42,15 +44,15 @@ import java.util.Map;
 public class ResponseUtil {
     public static Object ok() {
         Map<String, Object> obj = new HashMap<String, Object>();
-        obj.put("errno", 0);
-        obj.put("errmsg", "成功");
+        obj.put(JSON_ERRNO, 0);
+        obj.put(JSON_ERRMSG, "成功");
         return obj;
     }
 
     public static Object ok(Object data) {
         Map<String, Object> obj = new HashMap<String, Object>();
-        obj.put("errno", 0);
-        obj.put("errmsg", "成功");
+        obj.put(JSON_ERRNO, 0);
+        obj.put(JSON_ERRMSG, "成功");
         obj.put("data", data);
         return obj;
     }
@@ -97,15 +99,15 @@ public class ResponseUtil {
 
     public static Object fail() {
         Map<String, Object> obj = new HashMap<String, Object>();
-        obj.put("errno", -1);
-        obj.put("errmsg", "错误");
+        obj.put(JSON_ERRNO, -1);
+        obj.put(JSON_ERRMSG, "错误");
         return obj;
     }
 
     public static Object fail(int errno, String errmsg) {
         Map<String, Object> obj = new HashMap<String, Object>();
-        obj.put("errno", errno);
-        obj.put("errmsg", errmsg);
+        obj.put(JSON_ERRNO, errno);
+        obj.put(JSON_ERRMSG, errmsg);
         return obj;
     }
 

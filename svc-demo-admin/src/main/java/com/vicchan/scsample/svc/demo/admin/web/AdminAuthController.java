@@ -1,6 +1,9 @@
 package com.vicchan.scsample.svc.demo.admin.web;
 
 import com.alibaba.druid.support.json.JSONUtils;
+import com.vicchan.scsample.svc.core.swagger.model.ApiJsonObject;
+import com.vicchan.scsample.svc.core.swagger.model.ApiJsonProperty;
+import com.vicchan.scsample.svc.core.swagger.model.ApiJsonResult;
 import com.vicchan.scsample.svc.core.util.IpUtil;
 import com.vicchan.scsample.svc.core.util.JacksonUtil;
 import com.vicchan.scsample.svc.core.util.ResponseUtil;
@@ -17,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.vicchan.scsample.svc.core.common.GlobalString.*;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -32,33 +37,40 @@ public class AdminAuthController {
   private LogFeignClient logFC;
 
   @ApiOperation(value = "登录验证", notes = "用户通过用户名密码登陆")
+  @ApiJsonObject(
+      name = "authLogin",
+      value={
+          @ApiJsonProperty( name = JSON_USERNAME,required = true),
+          @ApiJsonProperty( name = JSON_PASSWORD,required = true),
+      },
+      result = @ApiJsonResult(value = {JSON_ERRNO,JSON_ERRMSG})
+  )
+  @ApiImplicitParam(name = "body",required = true,dataType = "authLogin")
   @ApiResponses({
-      @ApiResponse(code = 0, message = "登录成功"),
+      @ApiResponse( code=200,message="OK",reference = "authLogin"),
       @ApiResponse(code = -1, message = "错误"),
       @ApiResponse(code = 605, message = "用户帐号或密码不正确"),
   })
-  @ApiParam(name="body" ,value = "JSON格式字符串，包括用户名username和密码password", required = true)
   @PostMapping("/login")
-  // 用@RequestBody修饰的变量，不能用@ApiImplicitParam，要使用@ApiParam
   public Object login(@RequestBody String body, HttpServletRequest request) {
-    String username = JacksonUtil.parseString( body, "username" );
-    String password = JacksonUtil.parseString( body, "password" );
+    String username = JacksonUtil.parseString( body, JSON_USERNAME );
+    String password = JacksonUtil.parseString( body, JSON_PASSWORD );
 
     String ip = IpUtil.getIpAddr( request );
     //登录
     Map<String, Object> map = (HashMap<String, Object>) adminService.login( username, password, ip );
-    Integer errno = (Integer) map.get( "errno" );
+    Integer errno = (Integer) map.get( JSON_ERRNO );
     //调用svc-demo-log服务，写入日志
     Map<String, Object> logMap = new HashMap<>();
-    logMap.put( "action", "登录" );
-    logMap.put( "username", username );
+    logMap.put( JSON_ACTION, "登录" );
+    logMap.put( JSON_USERNAME, username );
     if (errno != null && errno == 0) {
       //成功
       Object obj = logFC.authSucceed( JSONUtils.toJSONString( logMap ) );
       logger.info( obj.toString() );
     } else {
       //失败
-      logMap.put( "errmsg", map.get( "errmsg" ) );
+      logMap.put( JSON_ERRMSG, map.get( JSON_ERRMSG ) );
       Object obj = logFC.authFail( JSONUtils.toJSONString( logMap ) );
       logger.info( obj.toString() );
     }
