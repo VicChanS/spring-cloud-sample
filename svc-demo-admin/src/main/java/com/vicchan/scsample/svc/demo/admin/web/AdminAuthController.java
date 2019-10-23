@@ -6,6 +6,7 @@ import com.vicchan.scsample.svc.core.util.JacksonUtil;
 import com.vicchan.scsample.svc.core.util.ResponseUtil;
 import com.vicchan.scsample.svc.demo.admin.feign.LogFeignClient;
 import com.vicchan.scsample.svc.demo.admin.service.AdminService;
+import io.swagger.annotations.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 @Validated
+@Api("用户验证API")
 public class AdminAuthController {
   private final Log logger = LogFactory.getLog( AdminAuthController.class );
 
@@ -29,27 +31,35 @@ public class AdminAuthController {
   @Autowired
   private LogFeignClient logFC;
 
-
+  @ApiOperation(value = "登录验证", notes = "用户通过用户名密码登陆")
+  @ApiResponses({
+      @ApiResponse(code = 0, message = "登录成功"),
+      @ApiResponse(code = -1, message = "错误"),
+      @ApiResponse(code = 605, message = "用户帐号或密码不正确"),
+  })
+  @ApiParam(name="body" ,value = "JSON格式字符串，包括用户名username和密码password", required = true)
   @PostMapping("/login")
+  // 用@RequestBody修饰的变量，不能用@ApiImplicitParam，要使用@ApiParam
   public Object login(@RequestBody String body, HttpServletRequest request) {
     String username = JacksonUtil.parseString( body, "username" );
     String password = JacksonUtil.parseString( body, "password" );
+
     String ip = IpUtil.getIpAddr( request );
     //登录
     Map<String, Object> map = (HashMap<String, Object>) adminService.login( username, password, ip );
     Integer errno = (Integer) map.get( "errno" );
     //调用svc-demo-log服务，写入日志
-    Map<String, Object> logMap =new HashMap<>();
+    Map<String, Object> logMap = new HashMap<>();
     logMap.put( "action", "登录" );
     logMap.put( "username", username );
     if (errno != null && errno == 0) {
       //成功
-      Object obj  = logFC.authSucceed( JSONUtils.toJSONString( logMap ));
-      logger.info( obj.toString());
+      Object obj = logFC.authSucceed( JSONUtils.toJSONString( logMap ) );
+      logger.info( obj.toString() );
     } else {
       //失败
       logMap.put( "errmsg", map.get( "errmsg" ) );
-      Object obj = logFC.authFail( JSONUtils.toJSONString( logMap ));
+      Object obj = logFC.authFail( JSONUtils.toJSONString( logMap ) );
       logger.info( obj.toString() );
     }
     return map;

@@ -36,6 +36,11 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/index/index", "anon");
         //健康检查不过滤
         filterChainDefinitionMap.put("/actuator/hystrix.stream", "anon");
+        //swagger接口权限 开放
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+        filterChainDefinitionMap.put("/v2/**", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
 
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setLoginUrl("/auth/401");

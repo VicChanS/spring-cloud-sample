@@ -10,7 +10,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.vicchan.scsample.svc.core","com.vicchan.scsample.svc.demo.log"})
 @EnableEurekaClient
 @EnableDiscoveryClient
 @RefreshScope
