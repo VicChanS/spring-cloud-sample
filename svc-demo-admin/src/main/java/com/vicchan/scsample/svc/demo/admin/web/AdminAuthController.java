@@ -42,8 +42,9 @@ public class AdminAuthController {
       value={
           @ApiJsonProperty( name = JSON_USERNAME,required = true),
           @ApiJsonProperty( name = JSON_PASSWORD,required = true),
+          @ApiJsonProperty( name = JSON_ADMIN_INFO,required = true)
       },
-      result = @ApiJsonResult(value = {JSON_ERRNO,JSON_ERRMSG})
+      result = @ApiJsonResult(type = "object", name = "data",value = {JSON_ADMIN_INFO,JSON_TOKEN})
   )
   @ApiImplicitParam(name = "body",required = true,dataType = "authLogin")
   @ApiResponses({
@@ -59,7 +60,7 @@ public class AdminAuthController {
     String ip = IpUtil.getIpAddr( request );
     //登录
     Map<String, Object> map = (HashMap<String, Object>) adminService.login( username, password, ip );
-    Integer errno = (Integer) map.get( JSON_ERRNO );
+    Integer errno = (Integer) map.get( JSON_ERROR_CODE );
     //调用svc-demo-log服务，写入日志
     Map<String, Object> logMap = new HashMap<>();
     logMap.put( JSON_ACTION, "登录" );
@@ -70,7 +71,7 @@ public class AdminAuthController {
       logger.info( obj.toString() );
     } else {
       //失败
-      logMap.put( JSON_ERRMSG, map.get( JSON_ERRMSG ) );
+      logMap.put( JSON_ERROR_MSG, map.get( JSON_ERROR_MSG ) );
       Object obj = logFC.authFail( JSONUtils.toJSONString( logMap ) );
       logger.info( obj.toString() );
     }

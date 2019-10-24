@@ -7,6 +7,7 @@ public class CommonData {
 
 
     private static  String RESULT_TYPE_NORMAL = "normal";
+    private static  String RESULT_TYPE_OBJECT = "object";
 
     private static  String RESULT_TYPE_PAGE = "page";
     private static  String RESULT_TYPE_LIST = "list";

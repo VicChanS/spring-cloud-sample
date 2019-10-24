@@ -44,15 +44,15 @@ import static com.vicchan.scsample.svc.core.common.GlobalString.*;
 public class ResponseUtil {
     public static Object ok() {
         Map<String, Object> obj = new HashMap<String, Object>();
-        obj.put(JSON_ERRNO, 0);
-        obj.put(JSON_ERRMSG, "成功");
+        obj.put(JSON_ERROR_CODE, 0);
+        obj.put(JSON_ERROR_MSG, "成功");
         return obj;
     }
 
     public static Object ok(Object data) {
         Map<String, Object> obj = new HashMap<String, Object>();
-        obj.put(JSON_ERRNO, 0);
-        obj.put(JSON_ERRMSG, "成功");
+        obj.put(JSON_ERROR_CODE, 0);
+        obj.put(JSON_ERROR_MSG, "成功");
         obj.put("data", data);
         return obj;
     }
@@ -99,15 +99,15 @@ public class ResponseUtil {
 
     public static Object fail() {
         Map<String, Object> obj = new HashMap<String, Object>();
-        obj.put(JSON_ERRNO, -1);
-        obj.put(JSON_ERRMSG, "错误");
+        obj.put(JSON_ERROR_CODE, -1);
+        obj.put(JSON_ERROR_MSG, "错误");
         return obj;
     }
 
     public static Object fail(int errno, String errmsg) {
         Map<String, Object> obj = new HashMap<String, Object>();
-        obj.put(JSON_ERRNO, errno);
-        obj.put(JSON_ERRMSG, errmsg);
+        obj.put(JSON_ERROR_CODE, errno);
+        obj.put(JSON_ERROR_MSG, errmsg);
         return obj;
     }
 

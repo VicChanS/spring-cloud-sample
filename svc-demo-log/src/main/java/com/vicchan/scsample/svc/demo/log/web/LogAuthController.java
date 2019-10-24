@@ -34,10 +34,10 @@ public class LogAuthController {
       name = "logAuthFail",
       value={
           @ApiJsonProperty( name = JSON_ACTION,required = true),
-          @ApiJsonProperty( name = JSON_ERRMSG,required = true, example =  "用户名密码错误"),
+          @ApiJsonProperty( name = JSON_ERROR_MSG,required = true, example =  "用户名密码错误"),
           @ApiJsonProperty( name = JSON_USERNAME,required = true)
       },
-      result = @ApiJsonResult(value = {JSON_ERRNO,JSON_ERRMSG})
+      result = @ApiJsonResult(value = {JSON_ERROR_CODE,JSON_ERROR_MSG})
   )
   @ApiImplicitParam(name = "body",required = true,dataType = "logAuthFail")
   @ApiResponses({
@@ -46,7 +46,7 @@ public class LogAuthController {
   @PostMapping("/fail")
   public Object fail(@RequestBody String body, HttpServletRequest request) {
     String action = JacksonUtil.parseString( body, JSON_ACTION );
-    String errmsg = JacksonUtil.parseString( body, JSON_ERRMSG );
+    String errmsg = JacksonUtil.parseString( body, JSON_ERROR_MSG );
     String username = JacksonUtil.parseString( body, JSON_USERNAME );
     logger.info( "登录失败，写入日志" );
     return logService.logAuthFail( action, errmsg, username );
@@ -59,7 +59,7 @@ public class LogAuthController {
           @ApiJsonProperty( name = JSON_ACTION,required = true),
           @ApiJsonProperty( name = JSON_USERNAME,required = true)
       },
-      result = @ApiJsonResult(value = {JSON_ERRNO,JSON_ERRMSG})
+      result = @ApiJsonResult(value = {JSON_ERROR_CODE,JSON_ERROR_MSG})
   )
   @ApiImplicitParam(name = "body",required = true,dataType = "logAuthSucceed")
   @ApiResponses({
