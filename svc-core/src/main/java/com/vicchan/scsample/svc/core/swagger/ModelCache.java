@@ -20,7 +20,7 @@ import java.util.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.newArrayList;
-import static com.vicchan.scsample.svc.core.swagger.CommonData.*;
+import static com.vicchan.scsample.svc.core.common.GlobalString.*;
 import static org.springframework.util.ObjectUtils.isEmpty;
 import static springfox.documentation.schema.Collections.collectionElementType;
 import static springfox.documentation.spi.schema.contexts.ModelContext.inputParam;
@@ -114,10 +114,10 @@ public class ModelCache {
         List<String> values = Arrays.asList(jsonResult.value());
         List<String> outer = new ArrayList<>();
 
-        if (!getResultTypeOther().equals(jsonResult.type())) {
-            outer.add(getJsonErrorCode());
-            outer.add(getJsonErrorMsg());
-            if (!getResultTypeNormal().equals(jsonResult.type())) {
+        if (!RESULT_TYPE_OTHER.equals(jsonResult.type())) {
+            outer.add(JSON_ERROR_CODE);
+            outer.add(JSON_ERROR_MSG);
+            if (!RESULT_TYPE_NORMAL.equals(jsonResult.type())) {
                 //model
                 String subModelName = groupName + "-" + jsonResult.name();
                 knownModels.put(subModelName,
@@ -165,10 +165,10 @@ public class ModelCache {
                 }
                 propertyMap.put(jsonResult.name(), mp);
 
-                if (getResultTypePage().equals(jsonResult.type())) {
-                    outer.add(getJsonStartPageNum());
-                    outer.add(getJsonPageSize());
-                    outer.add(getJsonTotalCount());
+                if (RESULT_TYPE_PAGE.equals(jsonResult.type())) {
+                    outer.add(JSON_START_PAGE_NUM);
+                    outer.add(JSON_PAGE_SIZE);
+                    outer.add(JSON_TOTAL_COUNT);
                 }
 
 

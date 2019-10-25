@@ -5,7 +5,7 @@ package com.vicchan.scsample.svc.core.swagger.model;
  */
 
 
-import com.vicchan.scsample.svc.core.swagger.CommonData;
+import com.vicchan.scsample.svc.core.common.GlobalString;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -21,7 +21,7 @@ public @interface ApiJsonResult {
 
     String name() default "";
 
-    String type() default CommonData.RESULT_TYPE_NORMAL_FINAL;
+    String type() default GlobalString.RESULT_TYPE_NORMAL;
 
 
 }

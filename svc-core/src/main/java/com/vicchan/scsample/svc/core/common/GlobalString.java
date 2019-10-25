@@ -10,6 +10,27 @@ import java.util.Map;
  */
 public class GlobalString {
 
+  /**
+   * 返回通用类型normal：自动添加errorCode和errorMsg
+   */
+  public static final String RESULT_TYPE_NORMAL = "normal";
+  /**
+   * 返回对象类型Object：把数据封装成一个对象，并在对象外添加errorCode和errorMsg
+   */
+  public static final String RESULT_TYPE_OBJECT = "object";
+  /**
+   * 返回分页类型page：把数据封装成一个对象列表，并在列表外添加errorCode、errorMsg、startPageNum、pageSize、totalCount
+   */
+  public static final String RESULT_TYPE_PAGE = "page";
+  /**
+   * 返回列表类型list：把数据封装成一个对象列表，并在列表外添加errorCode、errorMsg
+   */
+  public static final String RESULT_TYPE_LIST = "list";
+  /**
+   * 返回其他（自定义）类型other：不会自动添加任何字段，纯自定义
+   */
+  public static final String RESULT_TYPE_OTHER = "other";
+
   @ApiSingleParam(value = "响应码", example = "0")
   public static final String JSON_ERROR_CODE = "errorCode";
 
@@ -19,10 +40,10 @@ public class GlobalString {
   @ApiSingleParam(value = "开始页", example = "1")
   public static final String JSON_START_PAGE_NUM = "startPageNum";
 
-  @ApiSingleParam(value = "页数", example = "1")
+  @ApiSingleParam(value = "单页数据条数", example = "1")
   public static final String JSON_PAGE_SIZE = "pageSize";
 
-  @ApiSingleParam(value = "单页数据条数", example = "10")
+  @ApiSingleParam(value = "页数", example = "10")
   public static final String JSON_PAGE_COUNT = "pageCount";
 
   @ApiSingleParam(value = "数据总条数", example = "10")
