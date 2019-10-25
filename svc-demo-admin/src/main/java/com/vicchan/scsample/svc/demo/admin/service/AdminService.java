@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.vicchan.scsample.svc.core.common.GlobalString.*;
+
 @Service
 public class AdminService {
     private final Log logger = LogFactory.getLog(AdminService.class);
@@ -60,12 +62,12 @@ public class AdminService {
 
         // userInfo
         Map<String, Object> adminInfo = new HashMap<String, Object>();
-        adminInfo.put( "nickName", admin.getUsername() );
-        adminInfo.put( "avatar", admin.getAvatar() );
+        adminInfo.put( JSON_NICKNAME, admin.getUsername() );
+        adminInfo.put( JSON_AVATAR, admin.getAvatar() );
 
         Map<Object, Object> result = new HashMap<Object, Object>();
-        result.put( "token", currentUser.getSession().getId() );
-        result.put( "adminInfo", adminInfo );
+        result.put( JSON_TOKEN, currentUser.getSession().getId() );
+        result.put( JSON_ADMIN_INFO, adminInfo );
         return ResponseUtil.ok( result );
     }
 

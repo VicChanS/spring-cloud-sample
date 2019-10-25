@@ -88,7 +88,7 @@ public class ModelCache {
             modelName,
             new TypeResolver().resolve( String.class ),
             "com.vicchan.scsample.svc.core.swagger.CommonData",
-            toPropertyMap( jsonObj.value() ),
+            toPropertyMap( jsonObj.value() ,modelName),
             "POST参数",
             "",
             "",
@@ -111,7 +111,6 @@ public class ModelCache {
   }
 
   public Map<String, ModelProperty> toResultMap(ApiJsonResult jsonResult, String groupName) {
-//        System.out.println("--- toResultMap ---");
     List<String> values = Arrays.asList( jsonResult.value() );
     List<String> outer = new ArrayList<>();
     //子model的名称
@@ -261,7 +260,7 @@ public class ModelCache {
         if (groupName != null && !groupName.equals( "" )) {
           //在对象名前加上组名前缀
           subModelName = groupName + "-" + resultName;
-        }else{
+        } else {
           subModelName = resultName;
         }
         Map<String, ModelProperty> itemMap = transResultMap( Arrays.asList( items ), subModelName );
@@ -298,8 +297,7 @@ public class ModelCache {
     return propertyMap;
   }
 
-  public Map<String, ModelProperty> toPropertyMap(ApiJsonProperty[] jsonProp) {
-//        System.out.println("--- toPropertyMap ---");
+  public Map<String, ModelProperty> toPropertyMap(ApiJsonProperty[] jsonProp,String groupName) {
     Map<String, ModelProperty> propertyMap = new HashMap<String, ModelProperty>();
 
     for (ApiJsonProperty property : jsonProp) {
@@ -332,8 +330,6 @@ public class ModelCache {
       } else {
         resolvedType = new TypeResolver().resolve( type );
       }
-//            System.out.println("----- example: " + example);
-//            System.out.println("----- description: " + description);
       ModelProperty mp = new ModelProperty(
           propertyName,
           resolvedType,
@@ -352,12 +348,140 @@ public class ModelCache {
           newArrayList()
       );// new AllowableRangeValues("1", "2000"),//.allowableValues(new AllowableListValues(["ABC", "ONE", "TWO"], "string"))
       mp.updateModelRef( getModelRef() );
+
+
+      //包含的子属性
+      String[] items = param.items();
+      if (type == Object.class && items != null && items.length > 0) {
+        //当做对象处理，嵌套生成Model
+        String subModelName = null;
+        if (groupName != null && !groupName.equals( "" )) {
+          //在对象名前加上组名前缀
+          subModelName = groupName + "-" + propertyName;
+        } else {
+          subModelName = propertyName;
+        }
+        Map<String, ModelProperty> itemMap = transPropertyMap( Arrays.asList( items ),subModelName );
+        knownModels.put( subModelName,
+            new Model( subModelName,
+                subModelName,
+                new TypeResolver().resolve( String.class ),
+                "com.vicchan.scsample.svc.core.swagger.CommonData",
+                itemMap,
+                param.value(),
+                "",
+                "",
+                newArrayList(), null, null
+            ) );
+        try {
+          Field f = ModelProperty.class.getDeclaredField( "modelRef" );
+          f.setAccessible( true );
+          if (!allowMultiple) {
+            //对象
+            //new ModelRef(subModelName)表示关联已生成的Model，subModelName为Model名称
+            f.set( mp, new ModelRef( subModelName ) );
+          } else {
+            //列表
+            //new ModelRef("List", new ModelRef(subModelName))，第二个参数最终会变成itemModel
+            //第一个参数可能是新ModelRef的名称（变量类型却是type），经测试填任何内容都会生成List，List中的内容为itemModel
+            f.set( mp, new ModelRef( "List", new ModelRef( subModelName ) ) );
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
       propertyMap.put( property.name(), mp );
     }
 
     return propertyMap;
   }
 
+  public Map<String, ModelProperty> transPropertyMap(List<String> values,String groupName) {
+
+    Map<String, ModelProperty> propertyMap = new HashMap<>();
+    for (String resultName : values) {
+      ApiSingleParam param = paramMap.get( resultName );
+      if (isEmpty( param )) {
+        continue;
+      }
+      String description = param.value();
+      String example = param.example();
+      Class<?> type = param.type();
+      if (isEmpty( type )) {
+        type = String.class;
+      }
+      boolean allowMultiple = param.allowMultiple();
+      ResolvedType resolvedType = null;
+      if (allowMultiple) {
+        resolvedType = new TypeResolver().resolve( List.class, type );
+      } else {
+        resolvedType = new TypeResolver().resolve( type );
+      }
+      ModelProperty mp = new ModelProperty(
+          resultName,
+          resolvedType,
+          type.toString(),
+          0,
+          false,
+          false,
+          false,
+          null,
+          description,
+          null,
+          example,
+          null,
+          "",
+          null,
+          newArrayList()
+      );// new AllowableRangeValues("1", "2000"),//.allowableValues(new AllowableListValues(["ABC", "ONE", "TWO"], "string"))
+      mp.updateModelRef( getModelRef() );
+
+
+      //包含的子属性
+      String[] items = param.items();
+      if (type == Object.class && items != null && items.length > 0) {
+        //当做对象处理，嵌套生成Model
+        String subModelName = null;
+        if (groupName != null && !groupName.equals( "" )) {
+          //在对象名前加上组名前缀
+          subModelName = groupName + "-" + resultName;
+        } else {
+          subModelName = resultName;
+        }
+        Map<String, ModelProperty> itemMap = transPropertyMap( Arrays.asList( items ),subModelName );
+        knownModels.put( subModelName,
+            new Model( subModelName,
+                subModelName,
+                new TypeResolver().resolve( String.class ),
+                "com.vicchan.scsample.svc.core.swagger.CommonData",
+                itemMap,
+                param.value(),
+                "",
+                "",
+                newArrayList(), null, null
+            ) );
+        try {
+          Field f = ModelProperty.class.getDeclaredField( "modelRef" );
+          f.setAccessible( true );
+          if (!allowMultiple) {
+            //对象
+            //new ModelRef(subModelName)表示关联已生成的Model，subModelName为Model名称
+            f.set( mp, new ModelRef( subModelName ) );
+          } else {
+            //列表
+            //new ModelRef("List", new ModelRef(subModelName))，第二个参数最终会变成itemModel
+            //第一个参数可能是新ModelRef的名称（变量类型却是type），经测试填任何内容都会生成List，List中的内容为itemModel
+            f.set( mp, new ModelRef( "List", new ModelRef( subModelName ) ) );
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+      propertyMap.put( resultName, mp );
+    }
+
+    return propertyMap;
+  }
 
   private static class ModelCacheSub {
     private static ModelCache instance = new ModelCache();

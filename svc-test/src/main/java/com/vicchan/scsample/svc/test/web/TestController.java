@@ -41,7 +41,7 @@ public class TestController {
    */
   @ApiOperation(value = "测试swagger2", notes = "rtrtrtrtrt")
   @ApiImplicitParams({
-      @ApiImplicitParam(name = "str", value = "测试参数", required = true, dataType = "String")
+      @ApiImplicitParam(name = "str", value = "测试参数", required = true, dataType = "String", example = "Vic")
   })
   @ApiResponses({
       @ApiResponse(code = 0, message = "成功")

@@ -80,9 +80,4 @@ public class GlobalString {
   @ApiSingleParam(value = "用户信息对象", items = {JSON_NICKNAME,JSON_AVATAR}, type =  Object.class)
   public static final String JSON_ADMIN_INFO = "adminInfo";
 
-  // @ApiSingleParam(value = "用户信息对象2", items = {JSON_ADMIN_INFO,JSON_PASSWORD}, type =  Object.class)
-  // public static final String JSON_ADMIN_INFO2 = "adminInfo2";
-
-
-
 }
