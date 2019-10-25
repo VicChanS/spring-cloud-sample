@@ -43,7 +43,7 @@ public class AdminAuthController {
           @ApiJsonProperty( name = JSON_USERNAME,required = true),
           @ApiJsonProperty( name = JSON_PASSWORD,required = true)
       },
-      result = @ApiJsonResult(type = RESULT_TYPE_OBJECT, name = "data",value = {JSON_ADMIN_INFO,JSON_TOKEN})
+      result = @ApiJsonResult(type = RESULT_TYPE_OBJECT, name = RESULT_NAME_DATA,value = {JSON_ADMIN_INFO,JSON_TOKEN})
   )
   @ApiImplicitParam(name = "body",required = true,dataType = "authLogin")
   @ApiResponses({

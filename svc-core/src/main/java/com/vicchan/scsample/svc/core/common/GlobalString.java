@@ -30,6 +30,10 @@ public class GlobalString {
    * 返回其他（自定义）类型other：不会自动添加任何字段，纯自定义
    */
   public static final String RESULT_TYPE_OTHER = "other";
+  /**
+   * 返回对象的参数名称：data
+   */
+  public static final String RESULT_NAME_DATA = "data";
 
   @ApiSingleParam(value = "响应码", example = "0")
   public static final String JSON_ERROR_CODE = "errorCode";
