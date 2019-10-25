@@ -75,15 +75,13 @@ public class GlobalString {
   public static final String JSON_TOKEN = "token";
 
   /**
-   * TODO
-   * Model中的嵌套对象丢失描述，暂时未找到可行的处理方案
+   * 对象引用，items为对象中的字段
    */
-  // @ApiSingleParam(value = "用户信息对象", example = "{\n" +
-  //     "      \"nickName\": \"admin123\",\n" +
-  //     "      \"avatar\": \"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif\"\n" +
-  //     "    }" , type =  Map.class)
   @ApiSingleParam(value = "用户信息对象", items = {JSON_NICKNAME,JSON_AVATAR}, type =  Object.class)
   public static final String JSON_ADMIN_INFO = "adminInfo";
+
+  // @ApiSingleParam(value = "用户信息对象2", items = {JSON_ADMIN_INFO,JSON_PASSWORD}, type =  Object.class)
+  // public static final String JSON_ADMIN_INFO2 = "adminInfo2";
 
 
 

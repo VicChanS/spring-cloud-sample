@@ -257,7 +257,6 @@ public class ModelCache {
       String[] items = param.items();
       if (type == Object.class && items != null && items.length > 0) {
         //当做对象处理，嵌套生成Model
-        Map<String, ModelProperty> itemMap = transResultMap( Arrays.asList( items ), groupName );
         String subModelName = null;
         if (groupName != null && !groupName.equals( "" )) {
           //在对象名前加上组名前缀
@@ -265,6 +264,7 @@ public class ModelCache {
         }else{
           subModelName = resultName;
         }
+        Map<String, ModelProperty> itemMap = transResultMap( Arrays.asList( items ), subModelName );
         knownModels.put( subModelName,
             new Model( subModelName,
                 subModelName,

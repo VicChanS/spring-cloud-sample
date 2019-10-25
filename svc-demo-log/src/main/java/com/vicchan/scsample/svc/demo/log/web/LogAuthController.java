@@ -29,19 +29,19 @@ public class LogAuthController {
   @Autowired
   private LogService logService;
 
-  @ApiOperation(value="登录失败日志", notes = "写入登录失败的日志")
+  @ApiOperation(value = "登录失败日志", notes = "写入登录失败的日志")
   @ApiJsonObject(
       name = "logAuthFail",
-      value={
-          @ApiJsonProperty( name = JSON_ACTION,required = true),
-          @ApiJsonProperty( name = JSON_ERROR_MSG,required = true, example =  "用户名密码错误"),
-          @ApiJsonProperty( name = JSON_USERNAME,required = true)
+      value = {
+          @ApiJsonProperty(name = JSON_ACTION, required = true),
+          @ApiJsonProperty(name = JSON_ERROR_MSG, required = true, example = "用户名密码错误"),
+          @ApiJsonProperty(name = JSON_USERNAME, required = true)
       },
-      result = @ApiJsonResult(value = {JSON_ERROR_CODE,JSON_ERROR_MSG})
+      result = @ApiJsonResult(value = {})
   )
-  @ApiImplicitParam(name = "body",required = true,dataType = "logAuthFail")
+  @ApiImplicitParam(name = "body", required = true, dataType = "logAuthFail")
   @ApiResponses({
-      @ApiResponse( code=200,message="OK",reference = "logAuthFail")
+      @ApiResponse(code = 200, message = "OK", reference = "logAuthFail")
   })
   @PostMapping("/fail")
   public Object fail(@RequestBody String body, HttpServletRequest request) {
@@ -52,18 +52,18 @@ public class LogAuthController {
     return logService.logAuthFail( action, errmsg, username );
   }
 
-  @ApiOperation(value="登录成功日志", notes = "写入登录成功的日志")
+  @ApiOperation(value = "登录成功日志", notes = "写入登录成功的日志")
   @ApiJsonObject(
       name = "logAuthSucceed",
-      value={
-          @ApiJsonProperty( name = JSON_ACTION,required = true),
-          @ApiJsonProperty( name = JSON_USERNAME,required = true)
+      value = {
+          @ApiJsonProperty(name = JSON_ACTION, required = true),
+          @ApiJsonProperty(name = JSON_USERNAME, required = true)
       },
-      result = @ApiJsonResult(value = {JSON_ERROR_CODE,JSON_ERROR_MSG})
+      result = @ApiJsonResult(value = {})
   )
-  @ApiImplicitParam(name = "body",required = true,dataType = "logAuthSucceed")
+  @ApiImplicitParam(name = "body", required = true, dataType = "logAuthSucceed")
   @ApiResponses({
-      @ApiResponse( code=200,message="ok",reference = "logAuthSucceed")
+      @ApiResponse(code = 200, message = "OK", reference = "logAuthSucceed")
   })
   @PostMapping("/succeed")
   public Object succeed(@RequestBody String body, HttpServletRequest request) {
