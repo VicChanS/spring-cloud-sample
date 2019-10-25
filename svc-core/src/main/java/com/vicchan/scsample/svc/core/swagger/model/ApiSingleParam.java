@@ -21,6 +21,8 @@ public @interface ApiSingleParam {
 
     String example() default "";
 
+    String[] items() default {};
+
     boolean allowMultiple() default false;
 
 }

@@ -2,8 +2,6 @@ package com.vicchan.scsample.svc.core.common;
 
 import com.vicchan.scsample.svc.core.swagger.model.ApiSingleParam;
 
-import java.util.Map;
-
 /**
  * @author VicChan
  * @date 2019/10/23 2:44 PM
@@ -80,10 +78,11 @@ public class GlobalString {
    * TODO
    * Model中的嵌套对象丢失描述，暂时未找到可行的处理方案
    */
-  @ApiSingleParam(value = "用户信息对象", example = "{\n" +
-      "      \"nickName\": \"admin123\",\n" +
-      "      \"avatar\": \"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif\"\n" +
-      "    }" , type =  Map.class)
+  // @ApiSingleParam(value = "用户信息对象", example = "{\n" +
+  //     "      \"nickName\": \"admin123\",\n" +
+  //     "      \"avatar\": \"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif\"\n" +
+  //     "    }" , type =  Map.class)
+  @ApiSingleParam(value = "用户信息对象", items = {JSON_NICKNAME,JSON_AVATAR}, type =  Object.class)
   public static final String JSON_ADMIN_INFO = "adminInfo";
 
 

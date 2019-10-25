@@ -114,19 +114,24 @@ public class ModelCache {
 //        System.out.println("--- toResultMap ---");
     List<String> values = Arrays.asList( jsonResult.value() );
     List<String> outer = new ArrayList<>();
-
+    //子model的名称
+    String subModelName = null;
+    if (jsonResult.name() != null && !jsonResult.name().equals( "" )) {
+      subModelName = groupName + "-" + jsonResult.name();
+    } else {
+      subModelName = groupName;
+    }
     if (!RESULT_TYPE_OTHER.equals( jsonResult.type() )) {
       outer.add( JSON_ERROR_CODE );
       outer.add( JSON_ERROR_MSG );
       if (!RESULT_TYPE_NORMAL.equals( jsonResult.type() )) {
         //model
-        String subModelName = groupName + "-" + jsonResult.name();
         knownModels.put( subModelName,
             new Model( subModelName,
                 subModelName,
                 new TypeResolver().resolve( String.class ),
                 "com.vicchan.scsample.svc.core.swagger.CommonData",
-                transResultMap( values ),
+                transResultMap( values, subModelName ),
                 "返回模型",
                 "",
                 "",
@@ -174,7 +179,7 @@ public class ModelCache {
           if (RESULT_TYPE_OBJECT.equals( jsonResult.type() )) {
             //对象
             //new ModelRef(subModelName)表示关联已生成的Model，subModelName为Model名称
-            f.set( mp, new ModelRef( subModelName ) ) ;
+            f.set( mp, new ModelRef( subModelName ) );
           } else {
             //列表
             //new ModelRef("List", new ModelRef(subModelName))，第二个参数最终会变成itemModel
@@ -195,13 +200,17 @@ public class ModelCache {
       }
 
       outer.addAll( values );
-      return transResultMap( outer );
+      return transResultMap( outer, subModelName );
     }
 
-    return transResultMap( values );
+    return transResultMap( values, subModelName );
   }
 
   public Map<String, ModelProperty> transResultMap(List<String> values) {
+    return transResultMap( values, null );
+  }
+
+  public Map<String, ModelProperty> transResultMap(List<String> values, String groupName) {
     Map<String, ModelProperty> propertyMap = new HashMap<>();
     for (String resultName : values) {
       ApiSingleParam param = paramMap.get( resultName );
@@ -243,9 +252,49 @@ public class ModelCache {
           newArrayList()
       );// new AllowableRangeValues("1", "2000"),//.allowableValues(new AllowableListValues(["ABC", "ONE", "TWO"], "string"))
       mp.updateModelRef( getModelRef() );
+
+      //包含的子属性
+      String[] items = param.items();
+      if (type == Object.class && items != null && items.length > 0) {
+        //当做对象处理，嵌套生成Model
+        Map<String, ModelProperty> itemMap = transResultMap( Arrays.asList( items ), groupName );
+        String subModelName = null;
+        if (groupName != null && !groupName.equals( "" )) {
+          //在对象名前加上组名前缀
+          subModelName = groupName + "-" + resultName;
+        }else{
+          subModelName = resultName;
+        }
+        knownModels.put( subModelName,
+            new Model( subModelName,
+                subModelName,
+                new TypeResolver().resolve( String.class ),
+                "com.vicchan.scsample.svc.core.swagger.CommonData",
+                itemMap,
+                param.value(),
+                "",
+                "",
+                newArrayList(), null, null
+            ) );
+        try {
+          Field f = ModelProperty.class.getDeclaredField( "modelRef" );
+          f.setAccessible( true );
+          if (!allowMultiple) {
+            //对象
+            //new ModelRef(subModelName)表示关联已生成的Model，subModelName为Model名称
+            f.set( mp, new ModelRef( subModelName ) );
+          } else {
+            //列表
+            //new ModelRef("List", new ModelRef(subModelName))，第二个参数最终会变成itemModel
+            //第一个参数可能是新ModelRef的名称（变量类型却是type），经测试填任何内容都会生成List，List中的内容为itemModel
+            f.set( mp, new ModelRef( "List", new ModelRef( subModelName ) ) );
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
       propertyMap.put( resultName, mp );
     }
-
     return propertyMap;
   }
 
