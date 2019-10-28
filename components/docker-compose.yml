@@ -30,7 +30,7 @@ services:
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3-management
-    hostname: rabbitmq1
+    hostname: rabbitmq
     environment:
       - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
@@ -39,6 +39,8 @@ services:
     ports:
       - 15672:15672
       - 5672:5672
+    expose:
+      - "5672"
 
   zookeeper:
     container_name: zookeeper
@@ -84,37 +86,37 @@ services:
 #    depends_on:
 #      - kafka
 #      - elasticsearch
-#
-#  # zipkin的数据存入ES后，会丢失依赖关系，添加zipkin-dependencies可以解决
-#  # 可能是由于ES版本与dependency版本不一致或者内存不足的问题，未实现预期效果，待改进
-##  zipkin-dependencies:
-##    container_name: zipkin-dependencies
-##    image: openzipkin/zipkin-dependencies:latest
-##    #image: openzipkin/zipkin-dependencies:2.4.0
-##    #image: openzipkin/zipkin-dependencies:1.9.2
-##    # 启动定时任务
-##    #entrypoint: crond -f
-##    environment:
-##      # 把链路信息保存到ES中
-##      - STORAGE_TYPE=elasticsearch
-##      # ES主机地址
-##      - ES_HOSTS=http://192.168.0.220:9200
-##      # ES登录用户名
-##      - ES_USERNAME=elastic
-##      # ES登录密码
-##      - ES_PASSWORD=changeme
-##      #- ZIPKIN_LOG_LEVEL=DEBUG
-##      # Uncomment to adjust memory used by the dependencies job
-##      - JAVA_OPTS=-verbose:gc -Xmx1024M -Xms1024M
-##    depends_on:
-##      - elasticsearch
+
+  # zipkin的数据存入ES后，会丢失依赖关系，添加zipkin-dependencies可以解决
+  # 可能是由于ES版本与dependency版本不一致或者内存不足的问题，未实现预期效果，待改进
+#  zipkin-dependencies:
+#    container_name: zipkin-dependencies
+#    image: openzipkin/zipkin-dependencies:latest
+#    #image: openzipkin/zipkin-dependencies:2.4.0
+#    #image: openzipkin/zipkin-dependencies:1.9.2
+#    # 启动定时任务
+#    #entrypoint: crond -f
+#    environment:
+#      # 把链路信息保存到ES中
+#      - STORAGE_TYPE=elasticsearch
+#      # ES主机地址
+#      - ES_HOSTS=http://192.168.0.220:9200
+#      # ES登录用户名
+#      - ES_USERNAME=elastic
+#      # ES登录密码
+#      - ES_PASSWORD=changeme
+#      #- ZIPKIN_LOG_LEVEL=DEBUG
+#      # Uncomment to adjust memory used by the dependencies job
+#      - JAVA_OPTS=-verbose:gc -Xmx1024M -Xms1024M
+#    depends_on:
+#      - elasticsearch
 #
 #  elasticsearch:
 #    container_name: elasticsearch
 #    build:
 #      context: docker-elk/elasticsearch/
 #      args:
-#        ELK_VERSION: $ELK_VERSION
+#        ELK_VERSION: ${ELK_VERSION}
 #    volumes:
 #      - ./docker-elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
 #      - ./docker-elk/elasticsearch/data:/usr/share/elasticsearch/data
@@ -146,6 +148,8 @@ services:
 #    ports:
 #      - "5000:5000"
 #      - "9600:9600"
+#    env_file:
+#      - ../.env
 #    environment:
 #      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
 #    networks:
@@ -166,14 +170,16 @@ services:
 #        read_only: true
 #    ports:
 #      - "5601:5601"
+#    env_file:
+#      - ../.env
 #    networks:
 #      - elk
 #    depends_on:
 #      - elasticsearch
-
-networks:
-  elk:
-    driver: bridge
-
-volumes:
-  elasticsearch:
+#
+#networks:
+#  elk:
+#    driver: bridge
+#
+#volumes:
+#  elasticsearch:

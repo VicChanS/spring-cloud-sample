@@ -10,7 +10,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://peer1:8761/eureka/
+      defaultZone: http://sc-eureka:8761/eureka/
 
 ---
 spring:
@@ -23,7 +23,7 @@ spring:
         # 使用本地属性文件
         # 属性文件地址，只要指定文件夹的路径
         native:
-          search-locations: /Users/vicchan/CodeMonkey/MyProjects/spring-cloud-sample/repo-config
+          search-locations: ./repo-config
 
 ---
 spring:

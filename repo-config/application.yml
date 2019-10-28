@@ -7,7 +7,7 @@ eureka:
   client:
     serviceUrl:
       # 注册到任何一个eureka服务都可以（peer1，peer2，peer3）
-      defaultZone: http://peer1:8761/eureka/
+      defaultZone: http://sc-eureka:8761/eureka/
 
 spring:
   cloud:
@@ -19,8 +19,9 @@ spring:
       enabled: true
 
   # rabbitmq相关配置
+  # 要在/etc/hosts文件中配置rabbitmq的映射
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
