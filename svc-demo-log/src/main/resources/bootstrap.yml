@@ -1,3 +1,11 @@
+eureka:
+  client:
+    serviceUrl:
+      # 注册到任何一个eureka服务都可以（peer1，peer2，peer3）
+      defaultZone: http://sc-eureka:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
 spring:
   application:
     name: svc-demo-log

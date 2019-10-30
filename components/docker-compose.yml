@@ -16,16 +16,16 @@ services:
       - "3306"
     ports:
       - 3306:3306
-  redis:
-    container_name: redis
-    build:
-      context: ./docker-db/redis
-    expose:
-      - "6379"
-    ports:
-      - 6379:6379
-    volumes:
-      - ./docker-db/data/redis:/data
+#  redis:
+#    container_name: redis
+#    build:
+#      context: ./docker-db/redis
+#    expose:
+#      - "6379"
+#    ports:
+#      - 6379:6379
+#    volumes:
+#      - ./docker-db/data/redis:/data
 
   rabbitmq:
     container_name: rabbitmq

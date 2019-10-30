@@ -3,11 +3,12 @@
 # application-dev：所有微服务的dev(开发环境)配置
 # application-prod：所有微服务的prod(生产环境)配置
 #
-eureka:
-  client:
-    serviceUrl:
-      # 注册到任何一个eureka服务都可以（peer1，peer2，peer3）
-      defaultZone: http://sc-eureka:8761/eureka/
+#在微服务中写，需要先连上eureka才能通过sc-config服务名连接配置中心
+#eureka:
+#  client:
+#    serviceUrl:
+#      # 注册到任何一个eureka服务都可以（peer1，peer2，peer3）
+#      defaultZone: http://sc-eureka:8761/eureka/
 
 spring:
   cloud:
