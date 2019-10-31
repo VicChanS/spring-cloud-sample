@@ -31,49 +31,11 @@ services:
     volumes:
       - ./sc-config/target/sc-config-0.0.1-SNAPSHOT-exe.jar:/sc-config-0.0.1-SNAPSHOT-exe.jar
       - ./repo-config/:/repo-config
-    entrypoint: java -Xms64m -Xmx128m -jar /sc-config-0.0.1-SNAPSHOT-exe.jar
+    entrypoint: java -Xms64m -Xmx256m -jar /sc-config-0.0.1-SNAPSHOT-exe.jar
     extra_hosts:
      - "sc-eureka:192.168.0.220"
     depends_on:
       - sc-eureka
-
-  # 网关
-  sc-gateway:
-    image: mcpayment/ubuntu1404-java8:latest
-    ports:
-      - "9000:9000"
-    expose:
-      - "9000"
-    restart: "always"
-    container_name: sc-gateway
-    volumes:
-      - ./sc-gateway/target/sc-gateway-0.0.1-SNAPSHOT-exe.jar:/sc-gateway-0.0.1-SNAPSHOT-exe.jar
-    entrypoint: java -Xms64m -Xmx128m -jar /sc-gateway-0.0.1-SNAPSHOT-exe.jar
-    extra_hosts:
-      - "sc-eureka:192.168.0.220"
-      - "rabbitmq:192.168.0.220"
-    depends_on:
-      - sc-eureka
-      - sc-config
-
-  # 熔断器聚合服务
-  sc-hystrix-dashboard-turbine:
-    image: mcpayment/ubuntu1404-java8:latest
-    ports:
-      - "8999:8999"
-    expose:
-      - "8999"
-    restart: "always"
-    container_name: sc-hystrix-dashboard-turbine
-    volumes:
-      - ./sc-hystrix-dashboard-turbine/target/sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar:/sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar
-    entrypoint: java -Xms64m -Xmx128m -jar /sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar
-    extra_hosts:
-      - "sc-eureka:192.168.0.220"
-      - "rabbitmq:192.168.0.220"
-    depends_on:
-      - sc-eureka
-      - sc-config
 
   # 测试服务
   svc-test:
@@ -87,48 +49,101 @@ services:
     volumes:
       - ./svc-test/target/svc-test-0.0.1-SNAPSHOT-exe.jar:/svc-test-0.0.1-SNAPSHOT-exe.jar
     entrypoint: java -Xms64m -Xmx128m -jar /svc-test-0.0.1-SNAPSHOT-exe.jar
-    extra_hosts:
-      - "sc-eureka:192.168.0.220"
-      - "rabbitmq:192.168.0.220"
     depends_on:
       - sc-eureka
       - sc-config
+    links:
+      - sc-eureka
+    # 连接本docker-compose以外的docker容器
+    external_links:
+      # 格式：docker-compose网络前缀_容器名（可选：加上_1，表示同名的第几个容器）
+      - components_rabbitmq
+    networks:
+      # 当前compose的默认网络
+      - default
+      # 要连接的外部网络
+      - components_default
 
-  # demo-admin服务
-  svc-demo-admin:
+  # 网关
+  sc-gateway:
     image: mcpayment/ubuntu1404-java8:latest
     ports:
-      - "9001:9001"
+      - "9000:9000"
     expose:
-      - "9001"
+      - "9000"
     restart: "always"
-    container_name: svc-demo-admin
+    container_name: sc-gateway
     volumes:
-      - ./svc-demo-admin/target/svc-demo-admin-0.0.1-SNAPSHOT-exe.jar:/svc-demo-admin-0.0.1-SNAPSHOT-exe.jar
-    entrypoint: java -Xms64m -Xmx128m -jar /svc-demo-admin-0.0.1-SNAPSHOT-exe.jar
+      - ./sc-gateway/target/sc-gateway-0.0.1-SNAPSHOT-exe.jar:/sc-gateway-0.0.1-SNAPSHOT-exe.jar
+    entrypoint: java -Xms64m -Xmx256m -jar /sc-gateway-0.0.1-SNAPSHOT-exe.jar
     extra_hosts:
       - "sc-eureka:192.168.0.220"
       - "rabbitmq:192.168.0.220"
     depends_on:
       - sc-eureka
       - sc-config
+#
+#  # 熔断器聚合服务
+#  sc-hystrix-dashboard-turbine:
+#    image: mcpayment/ubuntu1404-java8:latest
+#    ports:
+#      - "8999:8999"
+#    expose:
+#      - "8999"
+#    restart: "always"
+#    container_name: sc-hystrix-dashboard-turbine
+#    volumes:
+#      - ./sc-hystrix-dashboard-turbine/target/sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar:/sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar
+#    entrypoint: java -Xms64m -Xmx128m -jar /sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar
+#    extra_hosts:
+#      - "sc-eureka:192.168.0.220"
+#      - "rabbitmq:192.168.0.220"
+#    depends_on:
+#      - sc-eureka
+#      - sc-config
+#
+#  # demo-admin服务
+#  svc-demo-admin:
+#    image: mcpayment/ubuntu1404-java8:latest
+#    ports:
+#      - "9001:9001"
+#    expose:
+#      - "9001"
+#    restart: "always"
+#    container_name: svc-demo-admin
+#    volumes:
+#      - ./svc-demo-admin/target/svc-demo-admin-0.0.1-SNAPSHOT-exe.jar:/svc-demo-admin-0.0.1-SNAPSHOT-exe.jar
+#    entrypoint: java -Xms64m -Xmx128m -jar /svc-demo-admin-0.0.1-SNAPSHOT-exe.jar
+#    extra_hosts:
+#      - "sc-eureka:192.168.0.220"
+#      - "rabbitmq:192.168.0.220"
+#    depends_on:
+#      - sc-eureka
+#      - sc-config
+#
+#  # demo-log服务
+#  svc-demo-log:
+#    image: mcpayment/ubuntu1404-java8:latest
+#    ports:
+#      - "9002:9002"
+#    expose:
+#      - "9002"
+#    restart: "always"
+#    container_name: svc-demo-log
+#    volumes:
+#      - ./svc-demo-log/target/svc-demo-log-0.0.1-SNAPSHOT-exe.jar:/svc-demo-log-0.0.1-SNAPSHOT-exe.jar
+#    entrypoint: java -Xms64m -Xmx128m -jar /svc-demo-log-0.0.1-SNAPSHOT-exe.jar
+#    extra_hosts:
+#      - "sc-eureka:192.168.0.220"
+#      - "rabbitmq:192.168.0.220"
+#    depends_on:
+#      - sc-eureka
+#      - sc-config
+#
 
-  # demo-log服务
-  svc-demo-log:
-    image: mcpayment/ubuntu1404-java8:latest
-    ports:
-      - "9002:9002"
-    expose:
-      - "9002"
-    restart: "always"
-    container_name: svc-demo-log
-    volumes:
-      - ./svc-demo-log/target/svc-demo-log-0.0.1-SNAPSHOT-exe.jar:/svc-demo-log-0.0.1-SNAPSHOT-exe.jar
-    entrypoint: java -Xms64m -Xmx128m -jar /svc-demo-log-0.0.1-SNAPSHOT-exe.jar
-    extra_hosts:
-      - "sc-eureka:192.168.0.220"
-      - "rabbitmq:192.168.0.220"
-    depends_on:
-      - sc-eureka
-      - sc-config
-
+networks:
+  # components的docker-compose的默认网络
+  # 可以通过docker network ls命令查询当前存在的所有网络
+  components_default:
+    # 标志为外部的
+    external: true

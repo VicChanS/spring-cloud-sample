@@ -6,6 +6,6 @@
 server:
   port: 9999
 
-foo: foo version ggggg
+foo: foo version ggggg234234
 democonfigclient:
   message: hello spring io
