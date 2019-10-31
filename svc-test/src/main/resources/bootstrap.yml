@@ -11,22 +11,21 @@ spring:
     name: svc-test
   cloud:
     config:
-      profile: svc,svc-dev  # 指定profile
+      profile: svc  # 指定profile
       # 修改hosts文件
       # uri: http://sc-config:8888
-      # uri: http://localhost:8888
       label: master  # 指定gitlab仓库的分支
       # fail-fast 为true，即在获取不到远程配置时，立即失败，但是用下边的配置进行重试
-      # fail-fast: true
+      fail-fast: true
       # initial-interval: 最初重试间隔为 1000 毫秒
       # max-attempts: 最多重试 6 次
       # max-interval: 最长重试间隔为 2000 毫秒
       # multiplier:  每次重试失败后，重试间隔所增加的倍数
-#      retry:
-#        initial-interval: 2000
-#        max-interval: 10000
-#        multiplier: 2
-#        max-attempts: 10
+      retry:
+        initial-interval: 2000
+        max-interval: 10000
+        multiplier: 2
+        max-attempts: 10
       discovery:
         # 不在直接使用uri，而是使用配置中心的服务名来识别
         service-id: sc-config

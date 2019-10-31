@@ -3,7 +3,6 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <springProperty scope="context" name="springAppName" source="spring.application.name"/>
-    <springProperty scope="context" name="serverIP" source="server.ip"/>
 
     <!--非生产环境-->
     <springProfile name="!prod">
@@ -79,7 +78,7 @@
         <topic>${springAppName}</topic>
         <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.HostNameKeyingStrategy"/>
         <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
-        <producerConfig>bootstrap.servers=${serverIP}:9092</producerConfig>
+        <producerConfig>bootstrap.servers=kafka:9092</producerConfig>
     </appender>
 
     <!--root的level基本除了INFO之外不能改为别的，如改为DEBUG的话会导致启动初始化持续堵塞，容器一直无法启动。-->

@@ -55,7 +55,7 @@
 
         <!--jdbc的数据库连接 读取hj-server.pom中的配置项-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.0.220:3306/spring_cloud_sample?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=UTC&amp;verifyServerCertificate=false&amp;useSSL=false"
+                        connectionURL="jdbc:mysql://mysql:3306/spring_cloud_sample?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=UTC&amp;verifyServerCertificate=false&amp;useSSL=false"
                         userId="root"
                         password="root"/>
 

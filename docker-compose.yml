@@ -5,13 +5,11 @@ services:
     image: mcpayment/ubuntu1404-java8:latest  #使用的镜像
     # 添加主机名的标签，
     # 相当于在docker中的/etc/hosts文件中添加一些记录
-    extra_hosts:
-     - "sc-eureka:127.0.0.1"
+    #extra_hosts:
+    #  - "sc-eureka:127.0.0.1"
     ports:
       - "8761:8761"  #暴露的端口信息和docker run -d -p 80:80 一样
-    expose:
-      - "8761"
-    restart: "always" #重启策略，能够使服务保持始终运行，生产环境推荐使用
+    #restart: "always" #重启策略，能够使服务保持始终运行，生产环境推荐使用
     container_name: sc-eureka #容器名称
     #挂载文件ps:如果是挂载文件必须在容器中也指定名称，推荐是挂载文件夹，下面只是做个文件挂载的案例也可以
     #挂载文件夹/root/compose_test/jdk/:/data
@@ -24,40 +22,42 @@ services:
     image: mcpayment/ubuntu1404-java8:latest
     ports:
       - "8888:8888"
-    expose:
-      - "8888"
-    restart: "always"
+    #restart: "always"
     container_name: sc-config
     volumes:
+      - ./entrypoint.sh:/entrypoint.sh
       - ./sc-config/target/sc-config-0.0.1-SNAPSHOT-exe.jar:/sc-config-0.0.1-SNAPSHOT-exe.jar
       - ./repo-config/:/repo-config
-    entrypoint: java -Xms64m -Xmx256m -jar /sc-config-0.0.1-SNAPSHOT-exe.jar
-    extra_hosts:
-     - "sc-eureka:192.168.0.220"
+    # 即使添加了depends_on也只能保证程序启动的顺序，但不能确保上一个服务完全运行起来才启动本服务，因此要添加监听脚本
+    entrypoint: /entrypoint.sh -d sc-eureka:8761 -c 'java -Xms64m -Xmx256m -jar /sc-config-0.0.1-SNAPSHOT-exe.jar';
     depends_on:
       - sc-eureka
+    external_links:
+      - components_rabbitmq
+    networks:
+      - default
+      - components_default
 
   # 测试服务
   svc-test:
     image: mcpayment/ubuntu1404-java8:latest
     ports:
       - "9999:9999"
-    expose:
-      - "9999"
-    restart: "always"
+    #restart: "always"
     container_name: svc-test
     volumes:
+      - ./entrypoint.sh:/entrypoint.sh
       - ./svc-test/target/svc-test-0.0.1-SNAPSHOT-exe.jar:/svc-test-0.0.1-SNAPSHOT-exe.jar
-    entrypoint: java -Xms64m -Xmx128m -jar /svc-test-0.0.1-SNAPSHOT-exe.jar
+    entrypoint: /entrypoint.sh -d sc-eureka:8761,sc-config:8888 -c 'java -Xms64m -Xmx128m -jar /svc-test-0.0.1-SNAPSHOT-exe.jar';
+    # 依赖的服务，在依赖的服务启动后，本服务才启动
     depends_on:
       - sc-eureka
       - sc-config
-    links:
-      - sc-eureka
     # 连接本docker-compose以外的docker容器
+    # 格式：docker-compose网络前缀_容器名（可选：加上_1，表示同名的第几个容器）
     external_links:
-      # 格式：docker-compose网络前缀_容器名（可选：加上_1，表示同名的第几个容器）
       - components_rabbitmq
+      - components_kafka
     networks:
       # 当前compose的默认网络
       - default
@@ -69,19 +69,20 @@ services:
     image: mcpayment/ubuntu1404-java8:latest
     ports:
       - "9000:9000"
-    expose:
-      - "9000"
-    restart: "always"
+    #restart: "always"
     container_name: sc-gateway
     volumes:
+      - ./entrypoint.sh:/entrypoint.sh
       - ./sc-gateway/target/sc-gateway-0.0.1-SNAPSHOT-exe.jar:/sc-gateway-0.0.1-SNAPSHOT-exe.jar
-    entrypoint: java -Xms64m -Xmx256m -jar /sc-gateway-0.0.1-SNAPSHOT-exe.jar
-    extra_hosts:
-      - "sc-eureka:192.168.0.220"
-      - "rabbitmq:192.168.0.220"
+    entrypoint: /entrypoint.sh -d sc-eureka:8761,sc-config:8888 -c 'java -Xms64m -Xmx256m -jar /sc-gateway-0.0.1-SNAPSHOT-exe.jar';
     depends_on:
       - sc-eureka
       - sc-config
+    external_links:
+      - components_rabbitmq
+    networks:
+      - default
+      - components_default
 #
 #  # 熔断器聚合服务
 #  sc-hystrix-dashboard-turbine:

@@ -12,11 +12,11 @@ services:
     container_name: zipkin-one
     environment:
       # 从kafka中获取信息。注意，在logstash中不要抓取zipkin主题的kafka信息，否则会导致zipkin无法正常获取kafka信息
-      - KAFKA_BOOTSTRAP_SERVERS=192.168.0.220:9092
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       # 把链路信息保存到ES中
       - STORAGE_TYPE=elasticsearch
       # ES主机地址
-      - ES_HOSTS=http://192.168.0.220:9200
+      - ES_HOSTS=http://elasticsearch:9200
       # ES登录用户名
       - ES_USERNAME=elastic
       # ES登录密码
