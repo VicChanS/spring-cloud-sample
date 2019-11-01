@@ -1,4 +1,4 @@
-version: "3.2" #版本号
+version: "2" #版本号
 services:
   # 注册中心
   sc-eureka: #服务名称（不是容器名）
@@ -8,28 +8,27 @@ services:
     #extra_hosts:
     #  - "sc-eureka:127.0.0.1"
     ports:
-      - "8761:8761"  #暴露的端口信息和docker run -d -p 80:80 一样
-    #restart: "always" #重启策略，能够使服务保持始终运行，生产环境推荐使用
+      - 8761:8761  #暴露的端口信息和docker run -d -p 80:80 一样
+    restart: "always" #重启策略，能够使服务保持始终运行，生产环境推荐使用
     container_name: sc-eureka #容器名称
-    #挂载文件ps:如果是挂载文件必须在容器中也指定名称，推荐是挂载文件夹，下面只是做个文件挂载的案例也可以
-    #挂载文件夹/root/compose_test/jdk/:/data
     volumes:
       - ./sc-eureka/target/sc-eureka-0.0.1-SNAPSHOT-exe.jar:/sc-eureka-0.0.1-SNAPSHOT-exe.jar
     entrypoint: java -Xms128m -Xmx256m -jar /sc-eureka-0.0.1-SNAPSHOT-exe.jar #启动容器后执行的命令
+    #mem_limit: 600000000  # 内存限制
 
   # 配置中心
   sc-config:
     image: mcpayment/ubuntu1404-java8:latest
     ports:
-      - "8888:8888"
-    #restart: "always"
+      - 8888:8888
+    restart: "always"
     container_name: sc-config
     volumes:
       - ./entrypoint.sh:/entrypoint.sh
       - ./sc-config/target/sc-config-0.0.1-SNAPSHOT-exe.jar:/sc-config-0.0.1-SNAPSHOT-exe.jar
       - ./repo-config/:/repo-config
     # 即使添加了depends_on也只能保证程序启动的顺序，但不能确保上一个服务完全运行起来才启动本服务，因此要添加监听脚本
-    entrypoint: /entrypoint.sh -d sc-eureka:8761 -c 'java -Xms64m -Xmx256m -jar /sc-config-0.0.1-SNAPSHOT-exe.jar';
+    entrypoint: /entrypoint.sh -d sc-eureka:8761 -c 'java -Xms128m -Xmx256m -jar /sc-config-0.0.1-SNAPSHOT-exe.jar';
     depends_on:
       - sc-eureka
     external_links:
@@ -37,13 +36,14 @@ services:
     networks:
       - default
       - components_default
+    #mem_limit: 600000000  # 内存限制
 
   # 测试服务
   svc-test:
     image: mcpayment/ubuntu1404-java8:latest
     ports:
-      - "9999:9999"
-    #restart: "always"
+      - 9999:9999
+    restart: "always"
     container_name: svc-test
     volumes:
       - ./entrypoint.sh:/entrypoint.sh
@@ -63,18 +63,19 @@ services:
       - default
       # 要连接的外部网络
       - components_default
+    #mem_limit: 500000000 # 内存限制
 
   # 网关
   sc-gateway:
     image: mcpayment/ubuntu1404-java8:latest
     ports:
-      - "9000:9000"
-    #restart: "always"
+      - 9000:9000
+    restart: "always"
     container_name: sc-gateway
     volumes:
       - ./entrypoint.sh:/entrypoint.sh
       - ./sc-gateway/target/sc-gateway-0.0.1-SNAPSHOT-exe.jar:/sc-gateway-0.0.1-SNAPSHOT-exe.jar
-    entrypoint: /entrypoint.sh -d sc-eureka:8761,sc-config:8888 -c 'java -Xms64m -Xmx256m -jar /sc-gateway-0.0.1-SNAPSHOT-exe.jar';
+    entrypoint: /entrypoint.sh -d sc-eureka:8761,sc-config:8888 -c 'java -Xms128m -Xmx256m -jar /sc-gateway-0.0.1-SNAPSHOT-exe.jar';
     depends_on:
       - sc-eureka
       - sc-config
@@ -83,64 +84,72 @@ services:
     networks:
       - default
       - components_default
-#
-#  # 熔断器聚合服务
-#  sc-hystrix-dashboard-turbine:
-#    image: mcpayment/ubuntu1404-java8:latest
-#    ports:
-#      - "8999:8999"
-#    expose:
-#      - "8999"
-#    restart: "always"
-#    container_name: sc-hystrix-dashboard-turbine
-#    volumes:
-#      - ./sc-hystrix-dashboard-turbine/target/sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar:/sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar
-#    entrypoint: java -Xms64m -Xmx128m -jar /sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar
-#    extra_hosts:
-#      - "sc-eureka:192.168.0.220"
-#      - "rabbitmq:192.168.0.220"
-#    depends_on:
-#      - sc-eureka
-#      - sc-config
-#
-#  # demo-admin服务
-#  svc-demo-admin:
-#    image: mcpayment/ubuntu1404-java8:latest
-#    ports:
-#      - "9001:9001"
-#    expose:
-#      - "9001"
-#    restart: "always"
-#    container_name: svc-demo-admin
-#    volumes:
-#      - ./svc-demo-admin/target/svc-demo-admin-0.0.1-SNAPSHOT-exe.jar:/svc-demo-admin-0.0.1-SNAPSHOT-exe.jar
-#    entrypoint: java -Xms64m -Xmx128m -jar /svc-demo-admin-0.0.1-SNAPSHOT-exe.jar
-#    extra_hosts:
-#      - "sc-eureka:192.168.0.220"
-#      - "rabbitmq:192.168.0.220"
-#    depends_on:
-#      - sc-eureka
-#      - sc-config
-#
-#  # demo-log服务
-#  svc-demo-log:
-#    image: mcpayment/ubuntu1404-java8:latest
-#    ports:
-#      - "9002:9002"
-#    expose:
-#      - "9002"
-#    restart: "always"
-#    container_name: svc-demo-log
-#    volumes:
-#      - ./svc-demo-log/target/svc-demo-log-0.0.1-SNAPSHOT-exe.jar:/svc-demo-log-0.0.1-SNAPSHOT-exe.jar
-#    entrypoint: java -Xms64m -Xmx128m -jar /svc-demo-log-0.0.1-SNAPSHOT-exe.jar
-#    extra_hosts:
-#      - "sc-eureka:192.168.0.220"
-#      - "rabbitmq:192.168.0.220"
-#    depends_on:
-#      - sc-eureka
-#      - sc-config
-#
+    #mem_limit: 600000000  # 内存限制
+
+  # 熔断器聚合服务
+  sc-hystrix-dashboard-turbine:
+    image: mcpayment/ubuntu1404-java8:latest
+    ports:
+      - 8999:8999
+    restart: "always"
+    container_name: sc-hystrix-dashboard-turbine
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh
+      - ./sc-hystrix-dashboard-turbine/target/sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar:/sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar
+    entrypoint: /entrypoint.sh -d sc-eureka:8761,sc-config:8888 -c 'java -Xms128m -Xmx256m -jar /sc-hystrix-dashboard-turbine-0.0.1-SNAPSHOT-exe.jar';
+    depends_on:
+      - sc-eureka
+      - sc-config
+    external_links:
+      - components_rabbitmq
+    networks:
+      - default
+      - components_default
+    #mem_limit: 500000000 # 内存限制
+
+  # demo-admin服务
+  svc-demo-admin:
+    image: mcpayment/ubuntu1404-java8:latest
+    ports:
+      - 9001:9001
+    restart: "always"
+    container_name: svc-demo-admin
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh
+      - ./svc-demo-admin/target/svc-demo-admin-0.0.1-SNAPSHOT-exe.jar:/svc-demo-admin-0.0.1-SNAPSHOT-exe.jar
+    entrypoint: /entrypoint.sh -d sc-eureka:8761,sc-config:8888 -c 'java -Xms64m -Xmx128m -jar /svc-demo-admin-0.0.1-SNAPSHOT-exe.jar';
+    depends_on:
+      - sc-eureka
+      - sc-config
+    external_links:
+      - components_rabbitmq
+      - components_kafka
+    networks:
+      - default
+      - components_default
+    #mem_limit: 500000000 # 内存限制
+
+  # demo-log服务
+  svc-demo-log:
+    image: mcpayment/ubuntu1404-java8:latest
+    ports:
+      - 9002:9002
+    restart: "always"
+    container_name: svc-demo-log
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh
+      - ./svc-demo-log/target/svc-demo-log-0.0.1-SNAPSHOT-exe.jar:/svc-demo-log-0.0.1-SNAPSHOT-exe.jar
+    entrypoint: /entrypoint.sh -d sc-eureka:8761,sc-config:8888 -c 'java -Xms64m -Xmx128m -jar /svc-demo-log-0.0.1-SNAPSHOT-exe.jar';
+    depends_on:
+      - sc-eureka
+      - sc-config
+    external_links:
+      - components_rabbitmq
+      - components_kafka
+    networks:
+      - default
+      - components_default
+    #mem_limit: 500000000 # 内存限制
 
 networks:
   # components的docker-compose的默认网络
@@ -148,3 +157,4 @@ networks:
   components_default:
     # 标志为外部的
     external: true
+

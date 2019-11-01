@@ -20,9 +20,9 @@ spring:
       # max-interval: 最长重试间隔为 2000 毫秒
       # multiplier:  每次重试失败后，重试间隔所增加的倍数
       retry:
-        initial-interval: 2000
-        max-interval: 10000
-        multiplier: 2
+        initial-interval: 1000
+        max-interval: 8000
+        multiplier: 1.5
         max-attempts: 10
       discovery:
         # 不在直接使用uri，而是使用配置中心的服务名来识别
