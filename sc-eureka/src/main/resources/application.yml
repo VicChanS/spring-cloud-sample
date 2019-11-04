@@ -1,59 +1,68 @@
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    # 禁止注册中心自己注册进来
+    register-with-eureka: false
+    fetch-registry: false
+
 spring:
   application:
     name: sc-eureka
   profiles:
     # 选择激活哪个profiles
     active: sc-eureka
-
 ---
 spring:
   profiles: sc-eureka
+
 server:
   port: 8761
+
 eureka:
   instance:
     hostname: sc-eureka
-    prefer-ip-address: true
   client:
-    # 禁止注册中心自己注册进来
-    register-with-eureka: false
-    fetch-registry: false
     service-url:
-      defaultZone: http://sc-eureka:8761/eureka/
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 ---
 spring:
-  profiles: peer1
+  profiles: sc-eureka1
+
 server:
   port: 8761
+
 eureka:
   instance:
-    hostname: peer1
-    prefer-ip-address: true
+    hostname: sc-eureka
   client:
     serviceUrl:
       # 填入其他两个eureka服务的地址和端口，多个服务用逗号隔开
-      defaultZone: http://peer2:8762/eureka/,http://peer3:8763/eureka/
+      defaultZone: http://sc-eureka2:8762/eureka/,http://sc-eureka3:8763/eureka/
 ---
 spring:
-  profiles: peer2
+  profiles: sc-eureka2
+
 server:
   port: 8762
+
 eureka:
   instance:
-    hostname: peer2
-    prefer-ip-address: true
+    hostname: sc-eureka2
   client:
     serviceUrl:
-      defaultZone: http://peer3:8763/eureka/,http://peer1:8761/eureka/
+      defaultZone: http://sc-eureka3:8763/eureka/,http://sc-eureka:8761/eureka/
 ---
+
 spring:
-  profiles: peer3
+  profiles: sc-eureka3
+
 server:
   port: 8763
+
 eureka:
   instance:
-    hostname: peer3
-    prefer-ip-address: true
+    hostname: sc-eureka3
   client:
     serviceUrl:
-      defaultZone: http://peer1:8761/eureka/,http://peer2:8762/eureka/
+      defaultZone: http://sc-eureka:8761/eureka/,http://sc-eureka2:8762/eureka/

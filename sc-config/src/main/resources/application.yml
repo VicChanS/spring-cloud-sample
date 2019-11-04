@@ -1,41 +1,26 @@
-server:
-  port: 8888
+eureka:
+  instance:
+    hostname: sc-eureka
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 
 spring:
   application:
     name: sc-config
   profiles:
-    active: native
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://sc-eureka:8761/eureka/
-  instance:
-    prefer-ip-address: true
-
----
-spring:
-  # 表示使用本地方式读取配置文件
-  profiles:
-    active: git
+    # native：使用本地仓库
+    # git：使用远程仓库
+    active: native,sc-config
   cloud:
     config:
+      label: master
       server:
         # 使用本地属性文件
         # 属性文件地址，只要指定文件夹的路径
         native:
           search-locations: ./repo-config
-
----
-spring:
-  # 表示使用git方式读取配置文件
-  profiles:
-    active: git
-  cloud:
-    config:
-      label: master
-      server:
         # 使用远程仓库
         git:
           # gitlab一定要以.git结束，github不用
@@ -44,3 +29,19 @@ spring:
           search-paths: repo-config
           username:
           password:
+          # 强制拉属性，如果本地副本是脏的，它将使Spring Cloud配置服务器从远程存储库中强制pull.
+          force-pull: true
+
+---
+spring:
+  profiles: sc-config
+
+server:
+  port: 8888
+
+---
+spring:
+  profiles: sc-config2
+
+server:
+  port: 8889
