@@ -112,26 +112,26 @@ services:
     #mem_limit: 600000000 # 内存限制
 
   # zipkin的数据存入ES后，会丢失依赖关系，添加zipkin-dependencies可以解决
-  # 可能是由于ES版本与dependency版本不一致或者内存不足的问题，未实现预期效果，待改进
-#  zipkin-dependencies:
-#    container_name: zipkin-dependencies
-#    image: openzipkin/zipkin-dependencies:latest
-#    # 启动定时任务
-#    #entrypoint: crond -f
-#    environment:
-#      # 把链路信息保存到ES中
-#      - STORAGE_TYPE=elasticsearch
-#      # ES主机地址
-#      - ES_HOSTS=http://elasticsearch:9200
-#      # ES登录用户名
-#      - ES_USERNAME=elastic
-#      # ES登录密码
-#      - ES_PASSWORD=changeme
-#      #- ZIPKIN_LOG_LEVEL=DEBUG
-#      # Uncomment to adjust memory used by the dependencies job
-#      - JAVA_OPTS=-verbose:gc -Xmx1024M -Xms1024M
-#    depends_on:
-#      - elasticsearch
+  zipkin-dependencies:
+    container_name: zipkin-dependencies
+    image: openzipkin/zipkin-dependencies:latest
+    restart: "always"
+    # 启动定时任务
+    #entrypoint: crond -f
+    environment:
+      # 把链路信息保存到ES中
+      - STORAGE_TYPE=elasticsearch
+      # ES主机地址
+      - ES_HOSTS=http://elasticsearch:9200
+      # ES登录用户名
+      - ES_USERNAME=elastic
+      # ES登录密码
+      - ES_PASSWORD=changeme
+      #- ZIPKIN_LOG_LEVEL=DEBUG
+      # Uncomment to adjust memory used by the dependencies job
+      - JAVA_OPTS=-verbose:gc -Xmx1024M -Xms1024M
+    depends_on:
+      - elasticsearch
 
   elasticsearch:
     container_name: elasticsearch
