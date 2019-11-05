@@ -31,6 +31,27 @@ spring:
           password:
           # 强制拉属性，如果本地副本是脏的，它将使Spring Cloud配置服务器从远程存储库中强制pull.
           force-pull: true
+  # rabbitmq相关配置
+  # 本地环境要在/etc/hosts文件中配置rabbitmq的映射
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
+
+management:
+  endpoints:
+    web:
+      # 指定暴露的接口
+      exposure:
+        # 消息总线刷新的接口名称
+#        include: bus-refresh
+        # 暴露所有接口
+        include: "*"
+      cors:
+        allowed-origins: "*"
+        allowed-methods: "*"
 
 ---
 spring:

@@ -20,7 +20,7 @@ spring:
       enabled: true
 
   # rabbitmq相关配置
-  # 要在/etc/hosts文件中配置rabbitmq的映射
+  # 本地环境要在/etc/hosts文件中配置rabbitmq的映射
   rabbitmq:
     host: rabbitmq
     port: 5672
