@@ -7,9 +7,9 @@
 version: '2'
 
 services:
-  zipkin-one:
+  zipkin:
+    container_name: zipkin
     image: openzipkin/zipkin:latest
-    container_name: zipkin-one
     environment:
       # 从kafka中获取信息。注意，在logstash中不要抓取zipkin主题的kafka信息，否则会导致zipkin无法正常获取kafka信息
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -21,13 +21,13 @@ services:
       - ES_USERNAME=elastic
       # ES登录密码
       - ES_PASSWORD=changeme
+      #- JAVA_OPTS=-Xmx256M -Xms256M
       - JAVA_OPTS=-Xmx256M -Xms256M -Dlogging.level.zipkin=INFO -Dlogging.level.zipkin2=INFO
-    networks:
-      - zipkin
-# 本地运行先去掉集群配置，省内存（集群环境已验证成功）
-  zipkin-two:
+    restart: "always"
+    #mem_limit: 600000000 # 内存限制
+  zipkin2:
+    container_name: zipkin2
     image: openzipkin/zipkin:latest
-    container_name: zipkin-two
     environment:
       # 从kafka中获取信息。注意，在logstash中不要抓取zipkin主题的kafka信息，否则会导致zipkin无法正常获取kafka信息
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -39,12 +39,13 @@ services:
       - ES_USERNAME=elastic
       # ES登录密码
       - ES_PASSWORD=changeme
+      #- JAVA_OPTS=-Xmx256M -Xms256M
       - JAVA_OPTS=-Xmx256M -Xms256M -Dlogging.level.zipkin=INFO -Dlogging.level.zipkin2=INFO
-    networks:
-      - zipkin
-  zipkin-three:
+    restart: "always"
+    #mem_limit: 600000000 # 内存限制
+  zipkin3:
+    container_name: zipkin3
     image: openzipkin/zipkin:latest
-    container_name: zipkin-three
     environment:
       # 从kafka中获取信息。注意，在logstash中不要抓取zipkin主题的kafka信息，否则会导致zipkin无法正常获取kafka信息
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -56,23 +57,20 @@ services:
       - ES_USERNAME=elastic
       # ES登录密码
       - ES_PASSWORD=changeme
+      #- JAVA_OPTS=-Xmx256M -Xms256M
       - JAVA_OPTS=-Xmx256M -Xms256M -Dlogging.level.zipkin=INFO -Dlogging.level.zipkin2=INFO
-    networks:
-      - zipkin
-  haproxy:
+    restart: "always"
+    #mem_limit: 600000000 # 内存限制
+  zipkin-haproxy:
+    container_name: zipkin-haproxy
     build:
       dockerfile: Dockerfile
       context: ./
+    restart: "always"
     depends_on:
-      - zipkin-one
-      - zipkin-two
-      - zipkin-three
+      - zipkin
+      - zipkin2
+      - zipkin3
     ports:
       - 9411:9411
       - 1936:1936
-    networks:
-      - zipkin
-
-networks:
-  zipkin:
-    driver: bridge

@@ -7,9 +7,9 @@
 version: '2'
 
 services:
-  zipkin-one:
+  zipkin:
+    container_name: zipkin
     image: openzipkin/zipkin:latest
-    container_name: zipkin-one
     environment:
       # 从kafka中获取信息。注意，在logstash中不要抓取zipkin主题的kafka信息，否则会导致zipkin无法正常获取kafka信息
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -21,14 +21,10 @@ services:
       - ES_USERNAME=elastic
       # ES登录密码
       - ES_PASSWORD=changeme
-#      - JAVA_OPTS=-Xmx256M -Xms256M
+      #- JAVA_OPTS=-Xmx256M -Xms256M
       - JAVA_OPTS=-Xmx256M -Xms256M -Dlogging.level.zipkin=INFO -Dlogging.level.zipkin2=INFO
     ports:
       - 9411:9411
       - 1936:1936
-#    networks:
-#      - zipkin
-#
-#networks:
-#  zipkin:
-#    driver: bridge
+    restart: "always"
+    #mem_limit: 600000000 # 内存限制

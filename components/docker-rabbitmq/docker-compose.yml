@@ -2,9 +2,10 @@ version: '3'
 
 services:
 
-  rabbitmq1:
+  rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3-management
-    hostname: rabbitmq1
+    hostname: rabbitmq
     environment:
       - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
@@ -13,3 +14,5 @@ services:
     ports:
       - 15672:15672
       - 5672:5672
+    restart: "always"
+    #mem_limit: 100000000 # 内存限制
